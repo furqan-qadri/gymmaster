@@ -4,6 +4,10 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from './components/Header';
 
+<head>
+<link rel="icon" href="/favicon.ico" sizes="any" />
+</head>
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
