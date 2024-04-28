@@ -47,8 +47,8 @@ export default function RootLayout({
                   </div>
                   <div className="xl:ml-64 mt-4 mx-4 flex-grow">
                     {children}
-                    <Button />
-                    <Datagrid />
+                    {/* <Button /> */}
+                    {/* <Datagrid /> */}
                   </div>
                 </div>
               </div>
