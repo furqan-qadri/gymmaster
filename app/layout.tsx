@@ -11,7 +11,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "../src/theme";
 
 <head>
-  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" href="./favicon.ico" sizes="any" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
