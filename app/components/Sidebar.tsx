@@ -28,7 +28,7 @@ function Sidebar() {
 
       <aside
         id="default-sidebar"
-        className="fixed w-64 h-full transition-transform -translate-x-full sm:translate-x-0"
+        className="fixed  w-60 h-full transition-transform -translate-x-full sm:translate-x-0 bg-slate-50"
         aria-label="Sidebar"
       >
         <div className="px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">

@@ -27,9 +27,14 @@ export default function RootLayout({
         <body>
           <div className="flex flex-col min-h-screen">
             <Header />
-            <Sidebar />
-
-            <main className="flex-grow p-4">{children}</main>
+            <div className="flex w-full">
+              <div className="w-60 fixed h-full overflow-y-auto">
+                <Sidebar />
+              </div>
+              <div className="xl:ml-64 mt-4 mx-4 flex-grow">
+                {children}hello
+              </div>
+            </div>
           </div>
         </body>
       </html>
