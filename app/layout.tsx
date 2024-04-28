@@ -1,12 +1,13 @@
-import { ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from './components/Header';
+import Header from "./components/Header";
+import Sidebar from "./components/Sidebar";
 
 <head>
-<link rel="icon" href="/favicon.ico" sizes="any" />
-</head>
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+</head>;
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,8 +25,13 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body>
-        <Header/>
-          {children}</body>
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <Sidebar />
+
+            <main className="flex-grow p-4">{children}</main>
+          </div>
+        </body>
       </html>
     </ClerkProvider>
   );
