@@ -4,9 +4,18 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
+import Button from "./components/Button";
+import Datagrid from "./components/Datagrid";
 
 <head>
   <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+  />
+  <meta name="viewport" content="initial-scale=1, width=device-width" />
 </head>;
 
 const inter = Inter({ subsets: ["latin"] });
@@ -31,7 +40,11 @@ export default function RootLayout({
               <div className="w-60 fixed h-full overflow-y-auto">
                 <Sidebar />
               </div>
-              <div className="xl:ml-64 mt-4 mx-4 flex-grow">{children}</div>
+              <div className="xl:ml-64 mt-4 mx-4 flex-grow">
+                {children}
+                <Button />
+                <Datagrid />
+              </div>
             </div>
           </div>
         </body>
