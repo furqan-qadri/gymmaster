@@ -2,6 +2,7 @@ import { ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton } from '@c
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Header from './components/Header';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,15 +20,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body>
-        <header>
-            <SignedOut>
-              <SignInButton />
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-          </header>
-          
+        <Header/>
           {children}</body>
       </html>
     </ClerkProvider>
