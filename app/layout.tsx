@@ -31,9 +31,7 @@ export default function RootLayout({
               <div className="w-60 fixed h-full overflow-y-auto">
                 <Sidebar />
               </div>
-              <div className="xl:ml-64 mt-4 mx-4 flex-grow">
-                {children}hello
-              </div>
+              <div className="xl:ml-64 mt-4 mx-4 flex-grow">{children}</div>
             </div>
           </div>
         </body>
