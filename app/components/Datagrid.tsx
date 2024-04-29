@@ -5,52 +5,7 @@ import { DataGrid, GridColDef, GridActionsCellItem } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import TextField from "@mui/material/TextField";
-
-const columns: GridColDef<(typeof rows)[number]>[] = [
-  {
-    field: "firstName",
-    headerName: "Name",
-    type: "string",
-    flex: 0.7,
-  },
-  {
-    field: "sex",
-    headerName: "Sex",
-    type: "string",
-    flex: 0.3,
-  },
-  {
-    field: "age",
-    headerName: "Age",
-    type: "string",
-    flex: 0.2,
-  },
-  {
-    field: "status",
-    headerName: "Status",
-    type: "string",
-    flex: 0.4,
-  },
-  {
-    field: "actions",
-    headerName: "More Actions",
-    type: "actions",
-    getActions: (params) => [
-      <GridActionsCellItem
-        icon={<VisibilityIcon />}
-        label="View"
-        onClick={() => alert(`Viewing ${params.id}`)}
-      />,
-      <GridActionsCellItem
-        icon={<DeleteIcon />}
-        label="Delete"
-        onClick={() => alert(`Deleting ${params.id}`)}
-        showInMenu
-      />,
-    ],
-    flex: 1,
-  },
-];
+import { useRouter } from "next/navigation";
 
 const rows = [
   {
@@ -132,6 +87,10 @@ export default function DataGridDemo() {
     page: 0,
     pageSize: 10,
   });
+  const router = useRouter();
+  const handleNameClick = (id: string) => {
+    router.push(`/members/${id}`);
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -149,6 +108,62 @@ export default function DataGridDemo() {
   const filteredRows = rows.filter((row) => {
     return row.firstName.toLowerCase().includes(searchText.toLowerCase());
   });
+
+  const columns: GridColDef<(typeof rows)[number]>[] = [
+    {
+      field: "firstName",
+      headerName: "Name",
+      type: "string",
+      flex: 0.7,
+      renderCell: (params) => (
+        <div
+          style={{
+            cursor: "pointer",
+          }}
+          onClick={() => handleNameClick(params.id.toString())}
+        >
+          {params.value}
+        </div>
+      ),
+    },
+    {
+      field: "sex",
+      headerName: "Sex",
+      type: "string",
+      flex: 0.3,
+    },
+    {
+      field: "age",
+      headerName: "Age",
+      type: "string",
+      flex: 0.2,
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      type: "string",
+      flex: 0.4,
+    },
+    {
+      field: "actions",
+      headerName: "More Actions",
+      type: "actions",
+      getActions: (params) => [
+        <GridActionsCellItem
+          icon={<VisibilityIcon />}
+          label="View"
+          onClick={() => alert(`Viewing ${params.id.toString()}`)}
+        />,
+        <GridActionsCellItem
+          icon={<DeleteIcon />}
+          label="Delete"
+          onClick={() => alert(`Deleting ${params.id}`)}
+          showInMenu
+        />,
+      ],
+      flex: 1,
+    },
+  ];
 
   return (
     <Box sx={{ height: 400, width: "100%" }}>
