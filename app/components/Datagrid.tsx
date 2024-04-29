@@ -1,5 +1,5 @@
 "use client";
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef, GridActionsCellItem } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -14,7 +14,7 @@ const columns: GridColDef<(typeof rows)[number]>[] = [
     flex: 0.7,
   },
   {
-    field: "lastName",
+    field: "sex",
     headerName: "Sex",
     type: "string",
     flex: 0.3,
@@ -53,18 +53,92 @@ const columns: GridColDef<(typeof rows)[number]>[] = [
 ];
 
 const rows = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 14, status: "Active" },
-  { id: 2, lastName: "Lannister", firstName: "Cersei", age: 31 },
-  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 31 },
-  { id: 4, lastName: "Stark", firstName: "Arya", age: 11 },
-  { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-  { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
+  {
+    id: 1,
+    firstName: "Muhammad Amir Bin Mazlan",
+    age: 24,
+    status: "Active",
+    sex: "Male",
+  },
+  {
+    id: 2,
+    firstName: "Ayesha Siddiqua",
+    age: 30,
+    status: "Inactive",
+    sex: "Female",
+  },
+  {
+    id: 3,
+    firstName: "Khalid Bin Walid",
+    age: 27,
+    status: "Active",
+    sex: "Male",
+  },
+  {
+    id: 4,
+    firstName: "Fatimah Zahra",
+    age: 22,
+    status: "Active",
+    sex: "Female",
+  },
+  {
+    id: 5,
+    firstName: "Yusuf Alai",
+    age: 35,
+    status: "Inactive",
+    sex: "Male",
+  },
+  {
+    id: 6,
+    firstName: "Zainab Bint Ali",
+    age: 28,
+    status: "Active",
+    sex: "Female",
+  },
+  {
+    id: 7,
+    firstName: "Abdullah Yusuf",
+    age: 31,
+    status: "Active",
+    sex: "Male",
+  },
+  {
+    id: 8,
+    firstName: "Noor Fatima",
+    age: 26,
+    status: "Active",
+    sex: "Female",
+  },
+  {
+    id: 9,
+    firstName: "Ibrahim Moiz",
+    age: 23,
+    status: "Inactive",
+    sex: "Male",
+  },
+  {
+    id: 10,
+    firstName: "Safia Naseem",
+    age: 29,
+    status: "Active",
+    sex: "Female",
+  },
 ];
 
 export default function DataGridDemo() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate a data fetch
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000); // 2 seconds simulated load time
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
+
   const [searchText, setSearchText] = React.useState("");
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
@@ -102,6 +176,7 @@ export default function DataGridDemo() {
         }}
         pageSizeOptions={[5]}
         disableSelectionOnClick
+        loading={loading}
         hideFooterSelectedRowCount
       />
     </Box>
