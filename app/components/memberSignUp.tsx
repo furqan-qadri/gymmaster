@@ -11,6 +11,7 @@ import {
   Box,
   FormHelperText,
 } from "@mui/material";
+import toast from "react-hot-toast";
 
 const validateEmail = (email: string) => {
   const re =
@@ -36,12 +37,13 @@ interface FormData {
   trainer: string;
 }
 
-const MemberSignUp = () => {
+const MemberSignUp = ({ onClose }) => {
   const [formData, setFormData] = useState<FormData>({
     name: "",
-    sex: "",
+    sex: "Male",
     phoneNumber: "",
     email: "",
+    identitynumber: "",
     address: "",
     age: "",
     status: "Active",
@@ -92,6 +94,7 @@ const MemberSignUp = () => {
   };
 
   const handleSubmit = (event: { preventDefault: () => void }) => {
+    toast.success("Member added successfully");
     event.preventDefault();
     const newErrors = {};
 
@@ -131,6 +134,13 @@ const MemberSignUp = () => {
 
   return (
     <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit}>
+      <div>
+        <h1 className="text-2xl font-bold my-2">ADD MEMBER</h1>
+        <h1 className="mb-6 italic">
+          Please enter the information of the gym member in the respective
+          fields.{" "}
+        </h1>
+      </div>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <TextField
@@ -155,12 +165,24 @@ const MemberSignUp = () => {
             >
               <MenuItem value="Male">Male</MenuItem>
               <MenuItem value="Female">Female</MenuItem>
-              <MenuItem value="Other">Other</MenuItem>
             </Select>
             {errors.sex && <FormHelperText>{errors.sex}</FormHelperText>}
           </FormControl>
         </Grid>
+
         <Grid item xs={12}>
+          <TextField
+            fullWidth
+            required
+            error={!!errors.identitynumber}
+            helperText={errors.identitynumber}
+            label="IC/Passport"
+            name="identitynumber"
+            value={formData.identitynumber}
+            onChange={handleChange}
+            sx={{ marginBottom: "15px" }}
+          />
+
           <TextField
             fullWidth
             required
@@ -277,11 +299,16 @@ const MemberSignUp = () => {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12}>
-          <Button type="submit" variant="contained">
-            Submit
-          </Button>
-        </Grid>
+        <div className="w-full">
+          <div className="flex gap-2 items-end justify-end mt-5">
+            <Button onClick={onClose} variant="outlined">
+              Cancel
+            </Button>
+            <Button type="submit" variant="contained">
+              Submit
+            </Button>
+          </div>
+        </div>
       </Grid>
     </Box>
   );

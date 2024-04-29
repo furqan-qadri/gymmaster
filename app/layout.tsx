@@ -9,6 +9,7 @@ import Button from "./components/Button";
 import Datagrid from "./components/Datagrid";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../src/theme";
+import toast, { Toaster } from "react-hot-toast";
 
 <head>
   <link rel="icon" href="./favicon.ico" sizes="any" />
@@ -28,6 +29,8 @@ export const metadata: Metadata = {
   description: "All-in-one gym management solution",
 };
 
+// const notify = () => toast.success("Here is your toast.");
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -41,6 +44,7 @@ export default function RootLayout({
             <body>
               <div className="flex flex-col min-h-screen">
                 <Header />
+                <Toaster />
                 <div className="flex w-full">
                   <div className="w-60 fixed h-full overflow-y-auto">
                     <Sidebar />
