@@ -1,34 +1,59 @@
+"use client";
 import * as React from "react";
 import Box from "@mui/material/Box";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridActionsCellItem } from "@mui/x-data-grid";
+import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import TextField from "@mui/material/TextField";
 
 const columns: GridColDef<(typeof rows)[number]>[] = [
-  { field: "id", headerName: "ID", width: 90 },
   {
     field: "firstName",
-    headerName: "First name",
+    headerName: "Name",
     type: "string",
-    width: 150,
-    editable: true,
+    flex: 0.7,
   },
   {
     field: "lastName",
-    headerName: "Last name",
+    headerName: "Sex",
     type: "string",
-    width: 150,
-    editable: true,
+    flex: 0.3,
   },
   {
     field: "age",
     headerName: "Age",
-    type: "number",
-    width: 110,
-    editable: true,
+    type: "string",
+    flex: 0.2,
+  },
+  {
+    field: "status",
+    headerName: "Status",
+    type: "string",
+    flex: 0.4,
+  },
+  {
+    field: "actions",
+    headerName: "More Actions",
+    type: "actions",
+    getActions: (params) => [
+      <GridActionsCellItem
+        icon={<VisibilityIcon />}
+        label="View"
+        onClick={() => alert(`Viewing ${params.id}`)}
+      />,
+      <GridActionsCellItem
+        icon={<DeleteIcon />}
+        label="Delete"
+        onClick={() => alert(`Deleting ${params.id}`)}
+        showInMenu
+      />,
+    ],
+    flex: 1,
   },
 ];
 
 const rows = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 14 },
+  { id: 1, lastName: "Snow", firstName: "Jon", age: 14, status: "Active" },
   { id: 2, lastName: "Lannister", firstName: "Cersei", age: 31 },
   { id: 3, lastName: "Lannister", firstName: "Jaime", age: 31 },
   { id: 4, lastName: "Stark", firstName: "Arya", age: 11 },
@@ -40,10 +65,33 @@ const rows = [
 ];
 
 export default function DataGridDemo() {
+  const [searchText, setSearchText] = React.useState("");
+  const handleSearchChange = (event) => {
+    setSearchText(event.target.value);
+  };
+
+  const filteredRows = rows.filter((row) => {
+    return (
+      row.firstName?.toLowerCase().includes(searchText.toLowerCase()) ||
+      row.lastName?.toLowerCase().includes(searchText.toLowerCase())
+    );
+  });
+
   return (
     <Box sx={{ height: 400, width: "100%" }}>
+      <Box sx={{ height: 70, width: "100%", marginTop: 2 }}>
+        <TextField
+          fullWidth
+          variant="outlined"
+          placeholder="Search member"
+          value={searchText}
+          onChange={handleSearchChange}
+          style={{ marginBottom: "20px" }}
+        />
+      </Box>
+
       <DataGrid
-        rows={rows}
+        rows={filteredRows}
         columns={columns}
         initialState={{
           pagination: {
@@ -53,8 +101,8 @@ export default function DataGridDemo() {
           },
         }}
         pageSizeOptions={[5]}
-        checkboxSelection
-        disableRowSelectionOnClick
+        disableSelectionOnClick
+        hideFooterSelectedRowCount
       />
     </Box>
   );
