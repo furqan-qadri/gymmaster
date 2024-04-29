@@ -1,7 +1,8 @@
-import React from "react";
+"use client";
+import { useParams } from "next/navigation";
 
-function page() {
-  return <div>This is the individual member no</div>;
+export default function PostID() {
+  const params = useParams();
+  console.log(params);
+  return <main>Post {params.id}</main>;
 }
-
-export default page;

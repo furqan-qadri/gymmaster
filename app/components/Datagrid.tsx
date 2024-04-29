@@ -152,7 +152,7 @@ export default function DataGridDemo() {
         <GridActionsCellItem
           icon={<VisibilityIcon />}
           label="View"
-          onClick={() => alert(`Viewing ${params.id.toString()}`)}
+          onClick={() => handleNameClick(params.id.toString())}
         />,
         <GridActionsCellItem
           icon={<DeleteIcon />}
