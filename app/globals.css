@@ -21,3 +21,11 @@
     text-wrap: balance;
   }
 }
+
+.MuiDataGrid-cell:focus-within {
+  outline: none !important;
+}
+
+.MuiDataGrid-cell:focus {
+  outline: none !important;
+}

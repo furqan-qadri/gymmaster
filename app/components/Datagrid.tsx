@@ -127,28 +127,27 @@ const rows = [
 
 export default function DataGridDemo() {
   const [loading, setLoading] = useState(true);
+  const [searchText, setSearchText] = useState("");
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 10,
+  });
 
   useEffect(() => {
-    // Simulate a data fetch
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 1000); // 2 seconds simulated load time
-
-    return () => {
-      clearTimeout(timer);
-    };
+    }, 1000);
+    return () => clearTimeout(timer);
   }, []);
 
-  const [searchText, setSearchText] = React.useState("");
-  const handleSearchChange = (event) => {
+  const handleSearchChange = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
     setSearchText(event.target.value);
   };
 
   const filteredRows = rows.filter((row) => {
-    return (
-      row.firstName?.toLowerCase().includes(searchText.toLowerCase()) ||
-      row.lastName?.toLowerCase().includes(searchText.toLowerCase())
-    );
+    return row.firstName.toLowerCase().includes(searchText.toLowerCase());
   });
 
   return (
@@ -163,20 +162,14 @@ export default function DataGridDemo() {
           style={{ marginBottom: "20px" }}
         />
       </Box>
-
       <DataGrid
         rows={filteredRows}
         columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
-            },
-          },
-        }}
-        pageSizeOptions={[5]}
-        disableSelectionOnClick
+        pageSizeOptions={[10, 25]}
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
         loading={loading}
+        disableRowSelectionOnClick
         hideFooterSelectedRowCount
       />
     </Box>
