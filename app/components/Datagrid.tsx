@@ -166,7 +166,7 @@ export default function DataGridDemo() {
   ];
 
   return (
-    <Box sx={{ height: 400, width: "100%" }}>
+    <Box sx={{ height: "100%", width: "100%" }}>
       <Box sx={{ height: 70, width: "100%", marginTop: 2 }}>
         <TextField
           fullWidth

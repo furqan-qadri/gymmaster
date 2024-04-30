@@ -1,9 +1,13 @@
-import React from 'react'
+import React from "react";
+import DataGridDemo from "../components/Datagrid";
 
 function page() {
   return (
-    <div>This is the trainers page</div>
-  )
+    <div>
+      <div className="flex text-xl font-bold"> Trainers</div>
+      <DataGridDemo />
+    </div>
+  );
 }
 
-export default page
+export default page;

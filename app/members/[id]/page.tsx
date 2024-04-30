@@ -33,7 +33,11 @@ export default function PostID() {
           </div>
 
           <PaymentStatusChart />
-          <AttendanceCalendar />
+          <div className="flex w-100 items-center justify-center">
+            <div className="flex w-1/2 items-center justify-center">
+              <AttendanceCalendar />
+            </div>
+          </div>
         </div>
       </div>
     </div>
