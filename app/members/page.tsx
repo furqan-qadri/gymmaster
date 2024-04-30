@@ -4,7 +4,7 @@ import DataGridDemo from "../components/Datagrid";
 import { Button, Dialog, DialogContent } from "@mui/material";
 import MemberSignUp from "../components/memberSignUp";
 
-function members() {
+function Members() {
   const [openSignUp, setOpenSignUp] = useState<boolean>(false);
 
   const handleOpenSignUp = () => {
@@ -55,4 +55,4 @@ function members() {
   );
 }
 
-export default members;
+export default Members;
