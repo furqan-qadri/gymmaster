@@ -10,7 +10,7 @@ function SelectedUserProfile() {
           <div className="text-center my-2">
             <img
               className="h-32 w-32 rounded-full border-4 border-white dark:border-gray-800 mx-auto"
-              src="https://randomuser.me/api/portraits/women/21.jpg"
+              src="https://randomuser.me/api/portraits/men/22.jpg"
               alt=""
             />
             <div className="py-2">
@@ -28,35 +28,44 @@ function SelectedUserProfile() {
           <div className="border-t border-gray-200">
             <dl>
               <div className="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Full name</dt>
+                <dt className="text-sm font-medium text-gray-500">Email</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  Mickael Poulaz
+                  muhammadamir872@gmail.com
                 </dd>
               </div>
               <div className="bg-white px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">
-                  Technology
+                  IC/Passport
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  React JS
+                  T5678934
                 </dd>
               </div>
               <div className="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Email</dt>
+                <dt className="text-sm font-medium text-gray-500">Age</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  m.poul@example.com
+                  24
+                </dd>
+              </div>
+              <div className="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">Sex</dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  Male
                 </dd>
               </div>
               <div className="bg-white px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Salary</dt>
+                <dt className="text-sm font-medium text-gray-500">Address</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  $10,000
+                  Residensi UTMKL, No. 8, Jalan Maktab, Kampung Datuk Keramat,
+                  54100 Kuala Lumpur, Malaysia
                 </dd>
               </div>
               <div className="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">About</dt>
+                <dt className="text-sm font-medium text-gray-500">
+                  Sign up date
+                </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  To get social
+                  24/4/2023
                 </dd>
               </div>
             </dl>
@@ -64,7 +73,11 @@ function SelectedUserProfile() {
         </div>
         <div className="flex gap-2 px-2 items-center justify-center">
           <Button variant="contained">Edit</Button>
-          <Button variant="outlined" color="error">
+          <Button
+            onClick={() => alert("Do you want to delete the member?")}
+            variant="outlined"
+            color="error"
+          >
             Delete Member
           </Button>
         </div>
