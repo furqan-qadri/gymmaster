@@ -150,11 +150,13 @@ export default function DataGridDemo() {
       type: "actions",
       getActions: (params) => [
         <GridActionsCellItem
+          key="view"
           icon={<VisibilityIcon />}
           label="View"
           onClick={() => handleNameClick(params.id.toString())}
         />,
         <GridActionsCellItem
+          key="delete"
           icon={<DeleteIcon />}
           label="Delete"
           onClick={() => alert(`Deleting ${params.id}`)}

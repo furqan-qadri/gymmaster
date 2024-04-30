@@ -5,7 +5,7 @@ import { Button, Dialog, DialogContent } from "@mui/material";
 import MemberSignUp from "../components/memberSignUp";
 
 function members() {
-  const [openSignUp, setOpenSignUp] = useState(false);
+  const [openSignUp, setOpenSignUp] = useState<boolean>(false);
 
   const handleOpenSignUp = () => {
     setOpenSignUp(true);
