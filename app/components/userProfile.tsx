@@ -15,7 +15,7 @@ function SelectedUserProfile() {
             />
             <div className="py-2">
               <h3 className="font-bold text-2xl text-gray-800 dark:text-white mb-1">
-                Muhammad Amir
+                Muhammad Amir Bin Mazlan
               </h3>
               <div className="inline-flex text-gray-700 dark:text-gray-300 items-center">
                 <BsFillTelephoneFill />
