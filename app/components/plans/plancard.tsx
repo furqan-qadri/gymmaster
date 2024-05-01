@@ -1,12 +1,12 @@
 import React from "react";
 
-function PlanCard() {
+function PlanCard(props: any) {
   return (
     <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg shadow-lg px-6 py-4 mt-8">
       <div className="flex flex-row justify-between">
         <div>
-          <h1 className="text-4xl font-bold text-white mb-4">Gold</h1>
-          <p className="text-xl text-white mb-8">RM 150 / Month</p>
+          <h1 className="text-4xl font-bold text-white mb-4">{props.name}</h1>
+          <p className="text-xl text-white mb-8">{props.price} RM/month</p>
         </div>
         <div className="pt-2">
           <a
@@ -57,8 +57,10 @@ function PlanCard() {
               </div>
 
               <div className="mx-5">
-                <h4 className="text-2xl font-semibold text-gray-700">4644</h4>
                 <div className="text-gray-500">Active Users</div>
+                <h4 className="text-2xl font-semibold text-gray-700">
+                  {props.activeUsers}
+                </h4>
               </div>
             </div>
           </div>
@@ -88,10 +90,10 @@ function PlanCard() {
               </div>
 
               <div className="mx-5">
-                <h4 className="text-2xl font-semibold text-gray-700">
-                  RM 3453
-                </h4>
                 <div className="text-gray-500">Revenue last month</div>
+                <h4 className="text-2xl font-semibold text-gray-700">
+                  {props.revenue}
+                </h4>
               </div>
             </div>
           </div>
@@ -121,8 +123,10 @@ function PlanCard() {
               </div>
 
               <div className="mx-5">
-                <h4 className="text-2xl font-semibold text-gray-700">67.8%</h4>
                 <div className="text-gray-500">Percentage Adoption</div>
+                <h4 className="text-2xl font-semibold text-gray-700">
+                  {props.percentage}
+                </h4>
               </div>
             </div>
           </div>

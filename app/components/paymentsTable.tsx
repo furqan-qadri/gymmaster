@@ -45,7 +45,7 @@ const PaymentStatusChart = () => {
   const [currentDate, setCurrentDate] = useState(moment());
 
   // Function to adjust the current date back and forth
-  const adjustDate = (months) => {
+  const adjustDate = (months: number) => {
     setCurrentDate(currentDate.clone().add(months, "months"));
   };
 

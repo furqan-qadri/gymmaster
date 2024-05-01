@@ -15,7 +15,7 @@ function Members() {
     setOpenSignUp(false);
   };
 
-  const handleClose = (event, reason) => {
+  const handleClose = (event: any, reason: any) => {
     if (reason === "backdropClick" || reason === "escapeKeyDown") {
       return; // Prevent closing the dialog on click outside or escape key
     }
