@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import {
   TextField,
@@ -11,6 +11,8 @@ import {
   Select,
   Box,
   FormHelperText,
+  TextareaAutosize,
+  // DatePicker,
 } from "@mui/material";
 
 interface FormData {
@@ -19,6 +21,11 @@ interface FormData {
   age: number;
   email: string;
   phoneNumber: string;
+  activeStatus: string;
+  address: string;
+  signUpDate: Date;
+  plan?: string;
+  trainer?: string;
 }
 
 const MemberSignUp = (props: any) => {
@@ -30,7 +37,7 @@ const MemberSignUp = (props: any) => {
 
   const onSubmit: SubmitHandler<FormData> = (data: any) => {
     console.log("Form submitted:", data);
-    // You can perform further actions like API call here
+    // Can perform further actions like API call here
   };
 
   return (
@@ -52,6 +59,7 @@ const MemberSignUp = (props: any) => {
               defaultValue={"Male"}
               {...register("sex", { required: "Sex is required" })}
               error={!!errors.sex}
+              label="Sex"
             >
               <MenuItem value="Male">Male</MenuItem>
               <MenuItem value="Female">Female</MenuItem>
@@ -104,7 +112,70 @@ const MemberSignUp = (props: any) => {
             helperText={errors.phoneNumber?.message}
           />
         </Grid>
+        {/* Additional Fields */}
+        <Grid item xs={12} sm={6}>
+          <FormControl fullWidth error={!!errors.activeStatus}>
+            <InputLabel>Active Status</InputLabel>
+            <Select
+              defaultValue={"Active"}
+              {...register("activeStatus", {
+                required: "Active status is required",
+              })}
+              error={!!errors.activeStatus}
+              label="Active Status"
+            >
+              <MenuItem value="Active">Active</MenuItem>
+              <MenuItem value="Inactive">Inactive</MenuItem>
+            </Select>
+            <FormHelperText>{errors.activeStatus?.message}</FormHelperText>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            fullWidth
+            multiline
+            minRows={3}
+            label="Address"
+            {...register("address", { required: "Address is required" })}
+            error={!!errors.address}
+            helperText={errors.address?.message}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <FormControl fullWidth error={!!errors.plan}>
+            <InputLabel>Plan</InputLabel>
+            <Select
+              {...register("plan", { required: "Plan is required" })}
+              error={!!errors.plan}
+              label="Plan"
+            >
+              <MenuItem value="">Select Plan</MenuItem>
+              <MenuItem value="Basic">Basic</MenuItem>
+              <MenuItem value="Premium">Premium</MenuItem>
+              <MenuItem value="VIP">VIP</MenuItem>
+            </Select>
+            <FormHelperText>{errors.plan?.message}</FormHelperText>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <FormControl fullWidth error={!!errors.trainer}>
+            <InputLabel>Trainer</InputLabel>
+            <Select
+              {...register("trainer", { required: "Trainer is required" })}
+              error={!!errors.trainer}
+              label="Trainer"
+            >
+              <MenuItem value="">Select Trainer</MenuItem>
+              <MenuItem value="John Doe">John Doe</MenuItem>
+              <MenuItem value="Jane Smith">Jane Smith</MenuItem>
+              <MenuItem value="Sam Wilson">Sam Wilson</MenuItem>
+            </Select>
+            <FormHelperText>{errors.trainer?.message}</FormHelperText>
+          </FormControl>
+        </Grid>
+
         <Grid item xs={12}>
+          <Button color="primary">Cancel</Button>
           <Button type="submit" variant="contained" color="primary">
             Submit
           </Button>
@@ -115,6 +186,3 @@ const MemberSignUp = (props: any) => {
 };
 
 export default MemberSignUp;
-function trigger(arg0: string): void {
-  throw new Error("Function not implemented.");
-}

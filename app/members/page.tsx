@@ -45,6 +45,7 @@ function Members() {
           <div>14</div>
         </div>
       </div>
+
       <Dialog open={openSignUp} onClose={handleClose} disableEscapeKeyDown>
         <DialogContent>
           <MemberSignUp onClose={handleClose} />

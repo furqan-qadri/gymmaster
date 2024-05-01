@@ -1,6 +1,7 @@
 import { Button } from "@mui/material";
 import React from "react";
 import { BsFillTelephoneFill } from "react-icons/bs";
+import Image from "next/image";
 
 function SelectedUserProfile(props: any) {
   return (
@@ -8,7 +9,7 @@ function SelectedUserProfile(props: any) {
       <div className="max-w-sm mx-auto bg-white dark:bg-gray-900 rounded-lg  overflow-hidden shadow-lg py-4">
         <div className="">
           <div className="text-center my-2">
-            <img
+            <Image
               className="h-32 w-32 rounded-full border-4 border-white dark:border-gray-800 mx-auto"
               src="https://randomuser.me/api/portraits/men/22.jpg"
               alt=""
