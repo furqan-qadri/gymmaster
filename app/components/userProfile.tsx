@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 import React from "react";
 import { BsFillTelephoneFill } from "react-icons/bs";
 
-function SelectedUserProfile() {
+function SelectedUserProfile(props: any) {
   return (
     <div className="w-full dark:bg-gray-700">
       <div className="max-w-sm mx-auto bg-white dark:bg-gray-900 rounded-lg  overflow-hidden shadow-lg py-4">
@@ -15,11 +15,11 @@ function SelectedUserProfile() {
             />
             <div className="py-2">
               <h3 className="font-bold text-2xl text-gray-800 dark:text-white mb-1">
-                Muhammad Amir Bin Mazlan
+                {props.name}
               </h3>
               <div className="inline-flex text-gray-700 dark:text-gray-300 items-center">
                 <BsFillTelephoneFill />
-                010-9256784
+                {props.phone}
               </div>
             </div>
           </div>
@@ -30,7 +30,7 @@ function SelectedUserProfile() {
               <div className="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Email</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  muhammadamir872@gmail.com
+                  {props.email}
                 </dd>
               </div>
               <div className="bg-white px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -38,26 +38,25 @@ function SelectedUserProfile() {
                   IC/Passport
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  T5678934
+                  {props.ic}
                 </dd>
               </div>
               <div className="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Age</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  24
+                  {props.age}
                 </dd>
               </div>
               <div className="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Sex</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  Male
+                  {props.sex}
                 </dd>
               </div>
               <div className="bg-white px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Address</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  Residensi UTMKL, No. 8, Jalan Maktab, Kampung Datuk Keramat,
-                  54100 Kuala Lumpur, Malaysia
+                  {props.address}
                 </dd>
               </div>
               <div className="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -65,7 +64,7 @@ function SelectedUserProfile() {
                   Sign up date
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  24/4/2023
+                  {props.signupdate}
                 </dd>
               </div>
             </dl>
@@ -78,7 +77,7 @@ function SelectedUserProfile() {
             variant="outlined"
             color="error"
           >
-            Delete Member
+            Delete {props.role}
           </Button>
         </div>
       </div>
