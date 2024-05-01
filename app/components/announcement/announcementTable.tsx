@@ -53,7 +53,12 @@ const AnnouncementsTable: React.FC = () => {
 
   const renderClickableCell = (params: GridCellParams) => (
     <div
-      style={{ cursor: "pointer" }}
+      style={{
+        cursor: "pointer",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+      }}
       onClick={() => handleAnnouncementClick(params.row as Announcement)}
     >
       {params.row[params.field]}
