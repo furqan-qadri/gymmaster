@@ -6,6 +6,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import TextField from "@mui/material/TextField";
 import { useRouter } from "next/navigation";
+import Avatar from "@mui/material/Avatar";
 
 const rows = [
   {
@@ -122,7 +123,15 @@ export default function DataGridDemo() {
           }}
           onClick={() => handleNameClick(params.id.toString())}
         >
-          {params.value}
+          <div className="flex gap-3 items-center">
+            {" "}
+            <Avatar
+              sx={{ alignItems: "center" }}
+              alt=""
+              src="/static/images/avatar/1.jpg"
+            />
+            {params.value}
+          </div>
         </div>
       ),
     },
