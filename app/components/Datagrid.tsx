@@ -177,7 +177,7 @@ export default function DataGridDemo() {
   ];
 
   return (
-    <Box sx={{ height: "100%", width: "100%" }}>
+    <Box sx={{ height: "100%", width: "99%", overflow: "auto" }}>
       <Box sx={{ height: 70, width: "100%", marginTop: 2 }}>
         <TextField
           fullWidth
@@ -197,6 +197,7 @@ export default function DataGridDemo() {
         loading={loading}
         disableRowSelectionOnClick
         hideFooterSelectedRowCount
+        autoHeight
       />
     </Box>
   );
