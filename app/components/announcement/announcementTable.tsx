@@ -1,5 +1,15 @@
 import React, { useState } from "react";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridCellParams, GridColDef } from "@mui/x-data-grid";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton,
+  Typography,
+  Box,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 // Define the type for announcement data
 interface Announcement {
@@ -32,12 +42,49 @@ const AnnouncementsTable: React.FC = () => {
     page: 0,
     pageSize: 10,
   });
-  // Define columns for the DataGrid
+  const [selectedAnnouncement, setSelectedAnnouncement] =
+    useState<Announcement | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleAnnouncementClick = (announcement: Announcement) => {
+    setSelectedAnnouncement(announcement);
+    setDialogOpen(true);
+  };
+
+  const renderClickableCell = (params: GridCellParams) => (
+    <div
+      style={{ cursor: "pointer" }}
+      onClick={() => handleAnnouncementClick(params.row as Announcement)}
+    >
+      {params.row[params.field]}
+    </div>
+  );
+
   const columns: GridColDef[] = [
-    { field: "id", headerName: "No", flex: 0.5 },
-    { field: "date", headerName: "Date", flex: 1 },
-    { field: "title", headerName: "Title", flex: 1 },
-    { field: "content", headerName: "Content", flex: 1 },
+    {
+      field: "id",
+      headerName: "No",
+      flex: 0.5,
+      renderCell: renderClickableCell,
+    },
+    {
+      field: "date",
+      headerName: "Date",
+      flex: 1,
+      renderCell: renderClickableCell,
+    },
+    {
+      field: "title",
+      headerName: "Title",
+      flex: 1,
+      renderCell: renderClickableCell,
+    },
+    {
+      field: "content",
+      headerName: "Content",
+      flex: 1,
+      renderCell: renderClickableCell,
+    },
   ];
 
   return (
@@ -51,6 +98,36 @@ const AnnouncementsTable: React.FC = () => {
         disableRowSelectionOnClick
         hideFooterSelectedRowCount
       />
+      <Dialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            {selectedAnnouncement?.title}
+            <IconButton onClick={() => setDialogOpen(false)}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body1" gutterBottom>
+            <strong>ID:</strong> {selectedAnnouncement?.id}
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            <strong>Date:</strong> {selectedAnnouncement?.date}
+          </Typography>
+          <Typography variant="body1">
+            <strong>Content:</strong> {selectedAnnouncement?.content}
+          </Typography>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
