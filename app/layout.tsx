@@ -46,7 +46,7 @@ export default function RootLayout({
                 <Header />
                 <Toaster />
                 <div className="flex w-full">
-                  <div className="w-60 fixed h-full overflow-y-auto">
+                  <div className="">
                     <Sidebar />
                   </div>
                   <div className="xl:ml-64 mt-4 mx-4 flex-grow">

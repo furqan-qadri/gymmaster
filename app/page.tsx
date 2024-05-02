@@ -1,7 +1,11 @@
+"use client";
 import React from "react";
+import { useRouter } from "next/navigation";
 
-function page() {
-  return <div>Dashboard</div>;
+function Page() {
+  const router = useRouter();
+  router.push("/members");
+  return <div></div>;
 }
 
-export default page;
+export default Page;

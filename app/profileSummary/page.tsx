@@ -1,4 +1,4 @@
-import { EmailAddress, auth, currentUser } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 export default async function DashboardPage() {
   const { userId } = auth();
   console.log(`this is the user id :` + userId);
