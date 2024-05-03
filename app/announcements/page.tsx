@@ -11,6 +11,10 @@ function Page() {
     setShowForm(!showForm);
   };
 
+  const handleCloseForm = () => {
+    setShowForm(false);
+  };
+
   return (
     <div>
       <div className="flex mb-4 justify-between items-center align-middle">
@@ -18,7 +22,7 @@ function Page() {
         <Button variant="contained" onClick={handleButtonClick}>
           New Announcement
         </Button>
-        {showForm && <AnnouncementForm />}
+        {showForm && <AnnouncementForm onClose={handleCloseForm} />}
       </div>
       <AnnouncementsTable />
     </div>

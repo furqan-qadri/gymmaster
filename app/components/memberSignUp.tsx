@@ -28,7 +28,7 @@ interface FormData {
   trainer?: string;
 }
 
-const MemberSignUp = (props: any) => {
+const MemberSignUp = ({ onClose }: { onClose: () => void }) => {
   const {
     register,
     handleSubmit,
@@ -37,7 +37,15 @@ const MemberSignUp = (props: any) => {
 
   const onSubmit: SubmitHandler<FormData> = (data: any) => {
     console.log("Form submitted:", data);
+    setOpen(false);
+    onClose();
     // Can perform further actions like API call here
+  };
+  const [open, setOpen] = useState(true);
+
+  const handleClose = () => {
+    setOpen(false);
+    onClose(); // Call the onClose function passed from the parent component
   };
 
   return (
@@ -175,7 +183,7 @@ const MemberSignUp = (props: any) => {
         </Grid>
 
         <Grid item xs={12}>
-          <Button color="primary">Cancel</Button>
+          <Button onClick={handleClose}>Cancel</Button>
           <Button type="submit" variant="contained" color="primary">
             Submit
           </Button>

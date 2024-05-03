@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import {
@@ -11,7 +10,6 @@ import {
   DialogContent,
   DialogTitle,
   Button,
-  InputLabel,
 } from "@mui/material";
 
 interface FormData {
@@ -21,7 +19,7 @@ interface FormData {
   date: Date;
 }
 
-const AnnouncementForm = (props: any) => {
+const AnnouncementForm = ({ onClose }: { onClose: () => void }) => {
   const {
     register,
     handleSubmit,
@@ -32,6 +30,7 @@ const AnnouncementForm = (props: any) => {
 
   const handleClose = () => {
     setOpen(false);
+    onClose(); // Call the onClose function passed from the parent component
   };
 
   const onSubmit: SubmitHandler<FormData> = (data: FormData) => {
