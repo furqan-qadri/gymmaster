@@ -1,34 +1,48 @@
 "use client";
 import React, { useState } from "react";
-import DataGridDemo from "../components/Datagrid";
 import { Button, Dialog, DialogContent } from "@mui/material";
 import MemberSignUp from "../components/memberSignUp";
+import DataGridDemo from "../components/Datagrid";
 
 function Members() {
-  const [openSignUp, setOpenSignUp] = useState<boolean>(false);
+  // const [openSignUp, setOpenSignUp] = useState<boolean>(false);
 
-  const handleOpenSignUp = () => {
-    setOpenSignUp(true);
+  // const handleOpenSignUp = () => {
+  //   setOpenSignUp(true);
+  // };
+
+  // const handleCloseSignUp = () => {
+  //   setOpenSignUp(false);
+  // };
+
+  // const handleClose = (
+  //   event: React.SyntheticEvent<Element, Event>,
+  //   reason: string
+  // ) => {
+  //   if (reason === "backdropClick" || reason === "escapeKeyDown") {
+  //     return; // Prevent closing the dialog on click outside or escape key
+  //   }
+  //   handleCloseSignUp();
+  // };
+
+  const [showForm, setShowForm] = useState(false);
+
+  const handleButtonClick = () => {
+    setShowForm(!showForm);
   };
 
-  const handleCloseSignUp = () => {
-    setOpenSignUp(false);
-  };
-
-  const handleClose = (event: any, reason: any) => {
-    if (reason === "backdropClick" || reason === "escapeKeyDown") {
-      return; // Prevent closing the dialog on click outside or escape key
-    }
-    handleCloseSignUp();
+  const handleCloseForm = () => {
+    setShowForm(false);
   };
 
   return (
     <div>
-      <div className="flex justify-between">
-        <h1 className="text-2xl font-bold ">Members</h1>
-        <Button variant="contained" onClick={handleOpenSignUp}>
+      <div className="flex mb-4 justify-between items-center align-middle">
+        <h1 className="text-2xl font-bold">Members</h1>
+        <Button variant="contained" onClick={handleButtonClick}>
           Add member
         </Button>
+        {showForm && <MemberSignUp onClose={handleCloseForm} />}
       </div>
 
       <div className="flex flex-col xl:flex-row xl:gap-5 gap-2 justify-between my-10">
@@ -46,11 +60,11 @@ function Members() {
         </div>
       </div>
 
-      <Dialog open={openSignUp} onClose={handleClose} disableEscapeKeyDown>
+      {/* <Dialog open={openSignUp} onClose={handleClose} disableEscapeKeyDown>
         <DialogContent>
-          <MemberSignUp onClose={handleClose} />
+          <MemberSignUp onClose={onClose()=>{handleClose}}/>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
       <DataGridDemo />
     </div>
   );
