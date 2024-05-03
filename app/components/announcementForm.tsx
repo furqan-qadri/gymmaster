@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import {
@@ -33,19 +34,18 @@ const AnnouncementForm = (props: any) => {
     setOpen(false);
   };
 
-  const onSubmit: SubmitHandler<FormData> = (data: any) => {
+  const onSubmit: SubmitHandler<FormData> = (data: FormData) => {
     console.log("Form submitted:", data);
-    console.log("hello");
-    // setOpen(false);
+    setOpen(false);
     // Can perform further actions like API call here
   };
 
   return (
     <>
-      <Dialog open={open}>
+      <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Create Announcement</DialogTitle>
-        <DialogContent>
-          <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+        <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+          <DialogContent>
             <Grid container spacing={4}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -69,14 +69,14 @@ const AnnouncementForm = (props: any) => {
                 />
               </Grid>
             </Grid>
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit" variant="contained" color="primary">
-            Submit
-          </Button>
-        </DialogActions>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit" variant="contained" color="primary">
+              Submit
+            </Button>
+          </DialogActions>
+        </Box>
       </Dialog>
     </>
   );
