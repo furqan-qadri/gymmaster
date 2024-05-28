@@ -55,7 +55,7 @@ const MemberSignUp = ({ onClose }: { onClose: () => void }) => {
   return (
     <>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Create Announcement</DialogTitle>
+        <DialogTitle>Add member</DialogTitle>
         <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
           <DialogContent>
             <Grid container spacing={2}>

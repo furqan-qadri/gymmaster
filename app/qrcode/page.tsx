@@ -10,7 +10,6 @@ const MyForm: React.FC = () => {
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
   const [isVerified, setIsVerified] = useState<boolean>(false);
   const [distanceFromGym, setDistanceFromGym] = useState<number | null>(null);
-
   useEffect(() => {
     if (coordinates) {
       // Calculate distance from the gym when coordinates are available
@@ -27,12 +26,26 @@ const MyForm: React.FC = () => {
     // Get current location of the user and store the coordinates in state
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        const { latitude, longitude } = position.coords;
+        const { latitude, longitude, altitude, accuracy } = position.coords;
         setCoordinates({ latitude, longitude });
+        console.log("this is the accuracy" + accuracy);
+
         setIsVerified(true);
       },
       (error) => {
         console.error("Error getting location:", error);
+      }
+    );
+  };
+
+  const handleLocationRequest = () => {
+    // Request location access from the user
+    navigator.geolocation.getCurrentPosition(
+      () => {
+        console.log("Location access granted.");
+      },
+      (error) => {
+        console.error("Error requesting location access:", error);
       }
     );
   };
@@ -70,6 +83,11 @@ const MyForm: React.FC = () => {
   return (
     <div>
       <div>
+        <div className=" italic">
+          * Please make sure that location access has been given to this
+          browser. If not, please enable location access for this browser in
+          settings.
+        </div>
         <button onClick={handleVerify} disabled={isVerified}>
           {isVerified ? "Verified" : "Verify"}
         </button>
