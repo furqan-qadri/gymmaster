@@ -24,6 +24,7 @@ interface FormData {
   sex: string;
   age: number;
   email: string;
+  icPassport: string;
   phoneNumber: string;
   activeStatus: string;
   address: string;
@@ -112,6 +113,23 @@ const MemberSignUp = ({ onClose }: { onClose: () => void }) => {
                   helperText={errors.email?.message}
                 />
               </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="IC/Passport"
+                  type="text" // Change type to "text"
+                  {...register("icPassport", {
+                    required: "IC/Passport is required",
+                    minLength: {
+                      value: 7,
+                      message: "IC/Passport must be at least 7 characters long",
+                    },
+                  })}
+                  error={!!errors.icPassport}
+                  helperText={errors.icPassport?.message}
+                />
+              </Grid>
+
               <Grid item xs={12}>
                 <TextField
                   fullWidth
