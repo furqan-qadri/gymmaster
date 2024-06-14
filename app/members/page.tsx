@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Button, Dialog, DialogContent } from "@mui/material";
 import MemberSignUp from "../components/memberSignUp";
 import DataGridDemo from "../components/Datagrid";
+import MyDropZone from "../components/MyDropzone";
 
 function Members() {
   // const [openSignUp, setOpenSignUp] = useState<boolean>(false);
@@ -37,6 +38,7 @@ function Members() {
 
   return (
     <div>
+      <MyDropZone />
       <div className="flex mb-4 justify-between items-center align-middle">
         <h1 className="text-2xl font-bold">Members</h1>
         <Button variant="contained" onClick={handleButtonClick}>
