@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import axios from "axios";
 import {
   TextField,
   MenuItem,
@@ -47,10 +48,38 @@ const MemberSignUp = ({ onClose }: { onClose: () => void }) => {
     onClose(); // Call the onClose function passed from the parent component
   };
 
-  const onSubmit: SubmitHandler<FormData> = (data: FormData) => {
-    console.log("Form submitted:", data);
-    setOpen(false);
-    // Can perform further actions like API call here
+  const onSubmit: SubmitHandler<FormData> = async (data: FormData) => {
+    try {
+      const formattedSignUpDate = new Date().toISOString().split("T")[0];
+      // Prepare the payload
+      const payload = {
+        full_name: data.name,
+        age: data.age,
+        sex: data.sex,
+        IC_Passport: data.icPassport,
+        phone: data.phoneNumber,
+        email_id: data.email,
+        address: data.address,
+        sign_up_date: formattedSignUpDate, // Current date
+        plan_id: data.plan, // Assuming plan is the plan_id
+        trainer_id: data.trainer, // Assuming trainer is the trainer_id
+      };
+
+      // Make the POST request
+      const response = await axios.post(
+        "http://localhost:8090/api/v1/gym/members/create",
+        payload
+      );
+
+      // If successful, log the response and close the modal
+      console.log("Data stored in database:", response.data);
+      // setOpen(false);
+      // onClose(); // Call the onClose function passed from the parent component
+    } catch (error) {
+      // If there's an error, log it and keep the modal open
+      console.error("Error storing data:", error);
+      // Optionally, you can show an error message to the user here
+    }
   };
 
   return (
@@ -187,7 +216,7 @@ const MemberSignUp = ({ onClose }: { onClose: () => void }) => {
                   >
                     <MenuItem value="">Select Plan</MenuItem>
                     <MenuItem value="Basic">Basic</MenuItem>
-                    <MenuItem value="Premium">Premium</MenuItem>
+                    <MenuItem value="1">Premium</MenuItem>
                     <MenuItem value="VIP">VIP</MenuItem>
                   </Select>
                   <FormHelperText>{errors.plan?.message}</FormHelperText>
@@ -204,9 +233,9 @@ const MemberSignUp = ({ onClose }: { onClose: () => void }) => {
                     label="Trainer"
                   >
                     <MenuItem value="">Select Trainer</MenuItem>
-                    <MenuItem value="John Doe">John Doe</MenuItem>
-                    <MenuItem value="Jane Smith">Jane Smith</MenuItem>
-                    <MenuItem value="Sam Wilson">Sam Wilson</MenuItem>
+                    <MenuItem value="4">John Doe</MenuItem>
+                    <MenuItem value="4">Jane Smith</MenuItem>
+                    <MenuItem value="4">Sam Wilson</MenuItem>
                   </Select>
                   <FormHelperText>{errors.trainer?.message}</FormHelperText>
                 </FormControl>

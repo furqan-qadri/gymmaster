@@ -5,83 +5,20 @@ import { DataGrid, GridColDef, GridActionsCellItem } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import TextField from "@mui/material/TextField";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"; // Make sure this is correctly imported
 import Avatar from "@mui/material/Avatar";
+import axios from "axios"; // Ensure Axios is imported
 
-const rows = [
-  {
-    id: 1,
-    firstName: "Muhammad Amir Bin Mazlan",
-    age: 24,
-    status: "Active",
-    sex: "Male",
-  },
-  {
-    id: 2,
-    firstName: "Ayesha Siddiqua",
-    age: 30,
-    status: "Inactive",
-    sex: "Female",
-  },
-  {
-    id: 3,
-    firstName: "Khalid Bin Walid",
-    age: 27,
-    status: "Active",
-    sex: "Male",
-  },
-  {
-    id: 4,
-    firstName: "Fatimah Zahra",
-    age: 22,
-    status: "Active",
-    sex: "Female",
-  },
-  {
-    id: 5,
-    firstName: "Yusuf Alai",
-    age: 35,
-    status: "Inactive",
-    sex: "Male",
-  },
-  {
-    id: 6,
-    firstName: "Zainab Bint Ali",
-    age: 28,
-    status: "Active",
-    sex: "Female",
-  },
-  {
-    id: 7,
-    firstName: "Abdullah Yusuf",
-    age: 31,
-    status: "Active",
-    sex: "Male",
-  },
-  {
-    id: 8,
-    firstName: "Noor Fatima",
-    age: 26,
-    status: "Active",
-    sex: "Female",
-  },
-  {
-    id: 9,
-    firstName: "Ibrahim Moiz",
-    age: 23,
-    status: "Inactive",
-    sex: "Male",
-  },
-  {
-    id: 10,
-    firstName: "Safia Naseem",
-    age: 29,
-    status: "Active",
-    sex: "Female",
-  },
-];
+interface Member {
+  id: number; // This will be the `member_id` from the API
+  full_name: string;
+  age: number;
+  active_status: string;
+  sex: string;
+}
 
 export default function DataGridDemo() {
+  const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState("");
   const [paginationModel, setPaginationModel] = useState({
@@ -89,42 +26,60 @@ export default function DataGridDemo() {
     pageSize: 10,
   });
   const router = useRouter();
+
+  useEffect(() => {
+    async function fetchMembers() {
+      try {
+        const response = await axios.get<{
+          success: boolean;
+          message: string;
+          members: any[]; // Temporarily using any to handle the API's mixed data types
+        }>("http://localhost:8090/api/v1/gym/members/getall");
+        if (response.data.success) {
+          setMembers(
+            response.data.members.map((member) => ({
+              id: member.member_id, // Correctly mapping `member_id` to `id`
+              full_name: member.full_name,
+              age: member.age,
+              active_status: member.active_status === 1 ? "Active" : "Inactive",
+              sex: member.sex,
+            }))
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching members:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchMembers();
+  }, []);
+
   const handleNameClick = (id: string) => {
     router.push(`/members/${id}`);
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const handleSearchChange = (event: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(event.target.value);
   };
 
-  const filteredRows = rows.filter((row) => {
-    return row.firstName.toLowerCase().includes(searchText.toLowerCase());
-  });
+  const filteredRows = members.filter((member) =>
+    member.full_name.toLowerCase().includes(searchText.toLowerCase())
+  );
 
-  const columns: GridColDef<(typeof rows)[number]>[] = [
+  const columns: GridColDef<Member>[] = [
     {
-      field: "firstName",
+      field: "full_name", // Corrected from "firstName" to "full_name"
       headerName: "Name",
       type: "string",
       flex: 0.7,
       renderCell: (params) => (
         <div
-          style={{
-            cursor: "pointer",
-          }}
+          style={{ cursor: "pointer" }}
           onClick={() => handleNameClick(params.id.toString())}
         >
           <div className="flex gap-3 items-center">
-            {" "}
             <Avatar
               sx={{ alignItems: "center" }}
               alt=""
@@ -135,20 +90,10 @@ export default function DataGridDemo() {
         </div>
       ),
     },
+    { field: "sex", headerName: "Sex", type: "string", flex: 0.3 },
+    { field: "age", headerName: "Age", type: "number", flex: 0.2 },
     {
-      field: "sex",
-      headerName: "Sex",
-      type: "string",
-      flex: 0.3,
-    },
-    {
-      field: "age",
-      headerName: "Age",
-      type: "string",
-      flex: 0.2,
-    },
-    {
-      field: "status",
+      field: "active_status", // Corrected from "status" to "active_status"
       headerName: "Status",
       type: "string",
       flex: 0.4,
