@@ -38,7 +38,6 @@ function Members() {
 
   return (
     <div>
-      <MyDropZone />
       <div className="flex mb-4 justify-between items-center align-middle">
         <h1 className="text-2xl font-bold">Members</h1>
         <Button variant="contained" onClick={handleButtonClick}>
