@@ -5,17 +5,37 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 import axios from "axios";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { BsFillTelephoneFill } from "react-icons/bs";
-import { useRouter } from "next/navigation";
+
+const months = [
+  { name: "January", value: 1 },
+  { name: "February", value: 2 },
+  { name: "March", value: 3 },
+  { name: "April", value: 4 },
+  { name: "May", value: 5 },
+  { name: "June", value: 6 },
+  { name: "July", value: 7 },
+  { name: "August", value: 8 },
+  { name: "September", value: 9 },
+  { name: "October", value: 10 },
+  { name: "November", value: 11 },
+  { name: "December", value: 12 },
+];
 
 function SelectedUserProfile(props: any) {
   const router = useRouter();
   const params = useParams();
+  const memberId = params.id; // Assuming the route parameter is named 'id'
   const [open, setOpen] = useState(false);
+  const [paymentOpen, setPaymentOpen] = useState(false);
   const [editedMember, setEditedMember] = useState({
     full_name: props.name,
     sex: props.sex,
@@ -24,6 +44,11 @@ function SelectedUserProfile(props: any) {
     phone: props.phone,
     email_id: props.email,
     address: props.address,
+  });
+  const [paymentDetails, setPaymentDetails] = useState({
+    paymentMonth: 1,
+    paymentYear: 2024,
+    amount: 150,
   });
 
   const handleClickOpen = () => {
@@ -37,7 +62,6 @@ function SelectedUserProfile(props: any) {
   const handleUpdate = async () => {
     if (window.confirm("Are you sure you want to update this member?")) {
       try {
-        const memberId = params.id; // Assuming the route parameter is named 'id'
         const response = await axios.put(
           `http://localhost:8090/api/v1/gym/members/update/${memberId}`,
           editedMember
@@ -58,7 +82,6 @@ function SelectedUserProfile(props: any) {
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this member?")) {
       try {
-        const memberId = params.id;
         const response = await axios.delete(
           `http://localhost:8090/api/v1/gym/members/delete/${memberId}`
         );
@@ -77,6 +100,44 @@ function SelectedUserProfile(props: any) {
 
   const handleChange = (field: any, value: any) => {
     setEditedMember((prev: any) => ({ ...prev, [field]: value }));
+  };
+
+  const handlePaymentClickOpen = () => {
+    setPaymentOpen(true);
+  };
+
+  const handlePaymentClose = () => {
+    setPaymentOpen(false);
+  };
+
+  const handlePaymentSubmit = async () => {
+    if (window.confirm("Are you sure you want to add this payment?")) {
+      try {
+        const response = await axios.post(
+          "http://localhost:8090/api/v1/gym/payments/create",
+          {
+            memberId: parseInt(memberId),
+            paymentMonth: paymentDetails.paymentMonth,
+            paymentYear: paymentDetails.paymentYear,
+            amount: paymentDetails.amount,
+          }
+        );
+        if (response.data.success) {
+          alert("Payment added successfully");
+          handlePaymentClose();
+          window.location.reload(); // Refresh the page
+        } else {
+          alert("Failed to add payment");
+        }
+      } catch (error) {
+        console.error("Failed to add payment:", error);
+        alert("Failed to add payment");
+      }
+    }
+  };
+
+  const handlePaymentDetailChange = (field: any, value: any) => {
+    setPaymentDetails((prev: any) => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -147,6 +208,9 @@ function SelectedUserProfile(props: any) {
           </div>
         </div>
         <div className="flex gap-2 px-2 items-center justify-center">
+          <Button onClick={handlePaymentClickOpen} variant="contained">
+            Add payment
+          </Button>
           <Button onClick={handleClickOpen} variant="contained">
             Edit
           </Button>
@@ -213,6 +277,56 @@ function SelectedUserProfile(props: any) {
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleUpdate} color="primary">
             Update
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={paymentOpen} onClose={handlePaymentClose}>
+        <DialogTitle>Add Payment</DialogTitle>
+        <DialogContent>
+          <FormControl fullWidth margin="dense">
+            <InputLabel id="payment-month-label">Month</InputLabel>
+            <Select
+              labelId="payment-month-label"
+              id="payment-month"
+              value={paymentDetails.paymentMonth}
+              label="Month"
+              onChange={(e) =>
+                handlePaymentDetailChange("paymentMonth", e.target.value)
+              }
+            >
+              {months.map((month) => (
+                <MenuItem key={month.value} value={month.value}>
+                  {month.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+            margin="dense"
+            label="Year"
+            type="number"
+            fullWidth
+            value={paymentDetails.paymentYear}
+            onChange={(e) =>
+              handlePaymentDetailChange("paymentYear", e.target.value)
+            }
+          />
+          <TextField
+            margin="dense"
+            label="Amount"
+            type="number"
+            fullWidth
+            value={paymentDetails.amount}
+            onChange={(e) =>
+              handlePaymentDetailChange("amount", e.target.value)
+            }
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handlePaymentClose}>Cancel</Button>
+          <Button onClick={handlePaymentSubmit} color="primary">
+            Submit
           </Button>
         </DialogActions>
       </Dialog>

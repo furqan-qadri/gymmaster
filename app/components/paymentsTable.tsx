@@ -1,96 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import moment from "moment"; // Ensure moment is installed using npm install moment
-
-// Mock data simulating payment records from the database
-const mockPaymentsData = [
-  {
-    payment_id: 1,
-    member_id: 101,
-    payment_month: 10,
-    payment_year: 2023,
-    is_paid: true,
-  },
-  {
-    payment_id: 144,
-    member_id: 101,
-    payment_month: 1,
-    payment_year: 2024,
-    is_paid: true,
-  },
-  {
-    payment_id: 2,
-    member_id: 101,
-    payment_month: 9,
-    payment_year: 2023,
-    is_paid: false,
-  },
-  {
-    payment_id: 3,
-    member_id: 101,
-    payment_month: 8,
-    payment_year: 2023,
-    is_paid: true,
-  },
-  {
-    payment_id: 4,
-    member_id: 101,
-    payment_month: 7,
-    payment_year: 2023,
-    is_paid: false,
-  },
-  {
-    payment_id: 5,
-    member_id: 101,
-    payment_month: 6,
-    payment_year: 2023,
-    is_paid: true,
-  },
-  {
-    payment_id: 6,
-    member_id: 101,
-    payment_month: 5,
-    payment_year: 2023,
-    is_paid: false,
-  },
-  {
-    payment_id: 7,
-    member_id: 101,
-    payment_month: 4,
-    payment_year: 2023,
-    is_paid: true,
-  },
-  {
-    payment_id: 8,
-    member_id: 101,
-    payment_month: 3,
-    payment_year: 2024,
-    is_paid: false,
-  },
-  {
-    payment_id: 9,
-    member_id: 101,
-    payment_month: 3,
-    payment_year: 2024,
-    is_paid: false,
-  },
-  {
-    payment_id: 10,
-    member_id: 101,
-    payment_month: 1,
-    payment_year: 2024,
-    is_paid: true,
-  },
-  {
-    payment_id: 11,
-    member_id: 101,
-    payment_month: 2,
-    payment_year: 2024,
-    is_paid: true,
-  },
-];
+import axios from "axios"; // Ensure axios is installed using npm install axios
+import { useParams, useRouter } from "next/navigation";
 
 const PaymentStatusChart = () => {
   const [currentDate, setCurrentDate] = useState(moment());
+  const [paymentsData, setPaymentsData] = useState([]);
+  const router = useRouter();
+  const params = useParams();
+  const memberId = params.id;
+
+  useEffect(() => {
+    const fetchPaymentsData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8090/api/v1/gym/payments/member/${memberId}`
+        );
+        if (response.data.success) {
+          setPaymentsData(response.data.payments);
+        } else {
+          console.error(
+            "Failed to fetch payments data:",
+            response.data.message
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching payments data:", error);
+      }
+    };
+
+    fetchPaymentsData();
+  }, [memberId]);
 
   // Function to adjust the current date back and forth by months
   const adjustDate = (months: number) => {
@@ -105,7 +45,7 @@ const PaymentStatusChart = () => {
   // Find payment status for each month
   const paymentStatus = paymentMonths.map((month) => {
     const [year, monthNum] = month.split("-");
-    const payment = mockPaymentsData.find(
+    const payment = paymentsData.find(
       (p) =>
         p.payment_month === parseInt(monthNum, 10) &&
         p.payment_year === parseInt(year, 10)

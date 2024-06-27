@@ -10,26 +10,31 @@ const MyForm: React.FC = () => {
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
   const [isVerified, setIsVerified] = useState<boolean>(false);
   const [distanceFromGym, setDistanceFromGym] = useState<number | null>(null);
+  const [locationVerified, setLocationVerified] = useState<boolean>(false);
+
   useEffect(() => {
     if (coordinates) {
-      // Calculate distance from the gym when coordinates are available
       const gymCoordinates: Coordinates = {
-        latitude: 34.120056,
-        longitude: 74.813602,
+        latitude: 3.172754,
+        longitude: 101.719183,
       };
       const distance = calculateDistance(coordinates, gymCoordinates);
       setDistanceFromGym(distance);
+
+      if (distance < 300) {
+        setLocationVerified(true);
+      } else {
+        setLocationVerified(false);
+      }
     }
   }, [coordinates]);
 
   const handleVerify = () => {
-    // Get current location of the user and store the coordinates in state
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        const { latitude, longitude, altitude, accuracy } = position.coords;
+        const { latitude, longitude, accuracy } = position.coords;
         setCoordinates({ latitude, longitude });
-        console.log("this is the accuracy" + accuracy);
-
+        console.log("this is the accuracy: " + accuracy);
         setIsVerified(true);
       },
       (error) => {
@@ -38,22 +43,8 @@ const MyForm: React.FC = () => {
     );
   };
 
-  const handleLocationRequest = () => {
-    // Request location access from the user
-    navigator.geolocation.getCurrentPosition(
-      () => {
-        console.log("Location access granted.");
-      },
-      (error) => {
-        console.error("Error requesting location access:", error);
-      }
-    );
-  };
-
   const handleSubmit = () => {
-    // Log all the data to the console
     console.log("Coordinates:", coordinates);
-    // You can add more form data logging here if needed
   };
 
   const calculateDistance = (
@@ -83,7 +74,7 @@ const MyForm: React.FC = () => {
   return (
     <div>
       <div>
-        <div className=" italic">
+        <div className="italic">
           * Please make sure that location access has been given to this
           browser. If not, please enable location access for this browser in
           settings.
@@ -95,7 +86,9 @@ const MyForm: React.FC = () => {
       {isVerified && distanceFromGym !== null && (
         <div>
           <p>Distance from the gym: {distanceFromGym.toFixed(2)} meters</p>
-          <button onClick={handleSubmit} disabled={!isVerified}>
+          {locationVerified && <p>Location: Verified</p>}
+          {!locationVerified && <p>Location: Not Verified</p>}
+          <button onClick={handleSubmit} disabled={!locationVerified}>
             Submit
           </button>
         </div>
