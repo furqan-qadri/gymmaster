@@ -1,17 +1,17 @@
-import React, { useState } from "react";
-import { DataGrid, GridCellParams, GridColDef } from "@mui/x-data-grid";
+"use client";
+import React, { useState, useEffect } from "react";
+import { DataGrid, GridColDef, GridCellParams } from "@mui/x-data-grid";
 import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
   IconButton,
   Typography,
   Box,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import axios from "axios";
 
-// Define the type for announcement data
 interface Announcement {
   id: number;
   date: string;
@@ -19,25 +19,8 @@ interface Announcement {
   content: string;
 }
 
-// Dummy data for announcements
-const announcements: Announcement[] = [
-  {
-    id: 1,
-    date: "2024-04-30",
-    title: "Important Announcement",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-  },
-  {
-    id: 2,
-    date: "2024-04-29",
-    title: "Upcoming Event",
-    content:
-      "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  // Add more announcements as needed
-];
-
 const AnnouncementsTable: React.FC = () => {
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
@@ -45,6 +28,38 @@ const AnnouncementsTable: React.FC = () => {
   const [selectedAnnouncement, setSelectedAnnouncement] =
     useState<Announcement | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8090/api/v1/gym/announcements/getall"
+        );
+        if (response.data.success) {
+          const mappedAnnouncements = response.data.announcements.map(
+            (announcement) => ({
+              id: announcement.announcement_id,
+              date: new Date(
+                announcement.announcement_date
+              ).toLocaleDateString(), // Format date for readability
+              title: announcement.title,
+              content: announcement.content,
+            })
+          );
+          setAnnouncements(mappedAnnouncements);
+        } else {
+          alert("Failed to fetch announcements: " + response.data.message);
+        }
+      } catch (error) {
+        console.error("Failed to fetch announcements:", error);
+        alert(
+          "Failed to fetch announcements, check the console for more information."
+        );
+      }
+    };
+
+    fetchAnnouncements();
+  }, []);
 
   const handleAnnouncementClick = (announcement: Announcement) => {
     setSelectedAnnouncement(announcement);
@@ -61,17 +76,11 @@ const AnnouncementsTable: React.FC = () => {
       }}
       onClick={() => handleAnnouncementClick(params.row as Announcement)}
     >
-      {params.row[params.field]}
+      {params.value}
     </div>
   );
 
   const columns: GridColDef[] = [
-    {
-      field: "id",
-      headerName: "No",
-      flex: 0.5,
-      renderCell: renderClickableCell,
-    },
     {
       field: "date",
       headerName: "Date",
@@ -122,9 +131,6 @@ const AnnouncementsTable: React.FC = () => {
           </Box>
         </DialogTitle>
         <DialogContent>
-          <Typography variant="body1" gutterBottom>
-            <strong>ID:</strong> {selectedAnnouncement?.id}
-          </Typography>
           <Typography variant="body1" gutterBottom>
             <strong>Date:</strong> {selectedAnnouncement?.date}
           </Typography>
