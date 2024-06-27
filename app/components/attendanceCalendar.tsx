@@ -1,41 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useParams } from "next/navigation";
 
 interface AttendanceData {
-  attendance_date: string; // Date in format 'YYYY-MM-DD'
-  attended: boolean;
+  attendance_id: number;
+  member_id: number;
+  attendance_date: string;
+  attended: number;
+  time: string;
 }
-
-// Example attendance data
-const mockData: AttendanceData[] = [
-  { attendance_date: "2024-05-01", attended: true },
-  { attendance_date: "2024-05-02", attended: false },
-  { attendance_date: "2024-04-01", attended: true },
-  { attendance_date: "2024-04-04", attended: true },
-  { attendance_date: "2024-04-28", attended: true },
-  { attendance_date: "2024-04-16", attended: true },
-  { attendance_date: "2024-05-03", attended: true },
-  { attendance_date: "2024-05-05", attended: true },
-  { attendance_date: "2024-06-06", attended: true },
-  { attendance_date: "2024-06-07", attended: true },
-  { attendance_date: "2024-06-08", attended: true },
-  { attendance_date: "2024-06-09", attended: true },
-  { attendance_date: "2024-06-10", attended: true },
-];
 
 const CustomMonthLayout: React.FC = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [attendanceData, setAttendanceData] = useState<AttendanceData[]>([]);
+  const params = useParams();
+
+  const fetchAttendanceData = async (memberId: string | string[]) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8090/api/v1/gym/attendance/member/${memberId}`
+      );
+      setAttendanceData(response.data.attendances);
+    } catch (error) {
+      console.error("Failed to fetch attendance data:", error);
+    }
+  };
+
+  useEffect(() => {
+    const memberId = params.id;
+    if (memberId) {
+      fetchAttendanceData(memberId);
+    }
+  }, [params.id]);
 
   const getDaysInMonth = (month: number, year: number) => {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     return Array.from({ length: daysInMonth }, (_, index) => {
       const day = new Date(Date.UTC(year, month, index + 1));
       const formattedDate = day.toISOString().slice(0, 10);
-      const attendance = mockData.find(
+      const attendance = attendanceData.find(
         (d) => d.attendance_date === formattedDate
-      )?.attended;
+      );
       return {
         attendance_date: day,
-        attended: attendance,
+        attended: attendance ? attendance.attended === 1 : false,
       };
     });
   };
@@ -84,6 +92,8 @@ const CustomMonthLayout: React.FC = () => {
             style={{
               padding: "10px",
               backgroundColor: day.attended ? "green" : "transparent",
+              border: "1px solid #ccc",
+              textAlign: "center",
             }}
           >
             {day.attendance_date.getUTCDate()}
