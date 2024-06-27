@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PlanCard from "../components/plans/plancard";
 import {
   Button,
@@ -11,30 +11,59 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
+interface Plan {
+  plan_id: number;
+  plan_name: string;
+  cost: string;
+  description: string;
+}
+
+interface PlanDetails {
+  plan_name: string;
+  cost: string;
+  description: string;
+}
+
 function SelectedUserProfile() {
-  // State for dialog visibility
-  const [openAddPlan, setOpenAddPlan] = useState(false);
-  // State for new plan details, adjusting for API requirements
-  const [newPlanDetails, setNewPlanDetails] = useState({
-    plan_name: "", // Changed from 'name' to 'plan_name' to match API requirements
+  const [openAddPlan, setOpenAddPlan] = useState<boolean>(false);
+  const [plans, setPlans] = useState<Plan[]>([]);
+  const [newPlanDetails, setNewPlanDetails] = useState<PlanDetails>({
+    plan_name: "",
     cost: "",
     description: "",
   });
 
-  // Function to open the add plan dialog
+  useEffect(() => {
+    async function fetchPlans() {
+      try {
+        const response = await axios.get<{ success: boolean; plans: Plan[] }>(
+          "http://localhost:8090/api/v1/gym/plans/getall"
+        );
+        if (response.data.success) {
+          setPlans(response.data.plans);
+        } else {
+          alert("Failed to fetch plans.");
+        }
+      } catch (error) {
+        console.error("Error fetching plans:", error);
+        alert("Failed to fetch plans.");
+      }
+    }
+
+    fetchPlans();
+  }, []);
+
   const handleOpenAddPlan = () => {
     setOpenAddPlan(true);
   };
 
-  // Function to close the add plan dialog
   const handleCloseAddPlan = () => {
     setOpenAddPlan(false);
   };
 
-  // Function to handle changes in the text fields within the dialog
-  const handlePlanDetailChange = (event: {
-    target: { name: any; value: any };
-  }) => {
+  const handlePlanDetailChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const { name, value } = event.target;
     setNewPlanDetails((prevDetails) => ({
       ...prevDetails,
@@ -42,18 +71,20 @@ function SelectedUserProfile() {
     }));
   };
 
-  // Function to submit the new plan to the backend via API
   const handleAddPlan = async () => {
     if (window.confirm("Are you sure you want to add this plan?")) {
       try {
-        const response = await axios.post(
-          "http://localhost:8090/api/v1/gym/plans/create",
-          newPlanDetails
-        );
+        const response = await axios.post<{
+          success: boolean;
+          plan_id: number;
+        }>("http://localhost:8090/api/v1/gym/plans/create", newPlanDetails);
         if (response.data.success) {
           alert("Plan added successfully.");
           handleCloseAddPlan();
-          window.location.reload();
+          setPlans([
+            ...plans,
+            { ...newPlanDetails, plan_id: response.data.plan_id },
+          ]);
         } else {
           alert("Failed to add plan.");
         }
@@ -69,27 +100,18 @@ function SelectedUserProfile() {
       <Button variant="outlined" onClick={handleOpenAddPlan}>
         Add Plan
       </Button>
-      <PlanCard
-        name="Platinum"
-        price="250"
-        revenue="3209"
-        percentage="67.9"
-        activeUsers="87"
-      />
-      <PlanCard
-        name="Gold"
-        price="200"
-        revenue="3209"
-        percentage="67.9"
-        activeUsers="87"
-      />
-      <PlanCard
-        name="Silver"
-        price="150"
-        revenue="3209"
-        percentage="67.9"
-        activeUsers="87"
-      />
+      {plans.map((plan: Plan) => (
+        <PlanCard
+          key={plan.plan_id}
+          name={plan.plan_name}
+          price={plan.cost}
+          plan_id={plan.plan_id}
+          description={plan.description}
+          revenue="3209"
+          percentage="67.9"
+          activeUsers="87"
+        />
+      ))}
       <Dialog open={openAddPlan} onClose={handleCloseAddPlan}>
         <DialogTitle>Add New Plan</DialogTitle>
         <DialogContent>
@@ -107,7 +129,7 @@ function SelectedUserProfile() {
           <TextField
             margin="dense"
             id="cost"
-            label="Plan cost"
+            label="Plan Cost"
             type="number"
             fullWidth
             name="cost"

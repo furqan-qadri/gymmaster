@@ -1,23 +1,134 @@
-import React from "react";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+} from "@mui/material";
+import axios from "axios";
+import React, { useState } from "react";
 
-function PlanCard(props: any) {
+interface PlanCardProps {
+  name: string;
+  price: string;
+  plan_id: number;
+  activeUsers: number;
+  revenue: string;
+  percentage: string;
+}
+
+function PlanCard({
+  name,
+  price,
+  plan_id,
+  activeUsers,
+  revenue,
+  percentage,
+}: PlanCardProps) {
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [editDetails, setEditDetails] = useState({
+    plan_name: name,
+    cost: price,
+  });
+
+  const handleDeleteClick = async () => {
+    if (window.confirm("Are you sure you want to delete this plan?")) {
+      handleDelete();
+    }
+  };
+  const handleDelete = async () => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8090/api/v1/gym/plans/delete/${plan_id}`
+      );
+      if (response.data.success) {
+        alert("Plan deleted successfully.");
+        window.location.reload();
+        // Optionally, invoke a callback or emit an event here to update the UI or state in the parent component
+      } else {
+        alert("Failed to delete plan.");
+      }
+    } catch (error) {
+      console.error("Failed to delete plan:", error);
+      alert("Failed to delete plan.");
+    }
+  };
+
+  const handleEditClick = () => {
+    setOpenEditDialog(true);
+  };
+
+  const handleCloseEditDialog = () => {
+    setOpenEditDialog(false);
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setEditDetails((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSaveChanges = async () => {
+    if (window.confirm("Are you sure you want to save these changes?")) {
+      try {
+        const response = await axios.put(
+          `http://localhost:8090/api/v1/gym/plans/update/${plan_id}`,
+          {
+            plan_name: editDetails.plan_name,
+            cost: editDetails.cost,
+          }
+        );
+        if (response.data.success) {
+          alert("Plan updated successfully.");
+          handleCloseEditDialog();
+          window.location.reload();
+        } else {
+          alert("Failed to update plan.");
+        }
+      } catch (error) {
+        console.error("Failed to update plan:", error);
+        alert("Failed to update plan.");
+      }
+    }
+  };
+
   return (
     <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg shadow-lg px-6 py-4 mt-8">
       <div className="flex flex-row justify-between">
         <div>
-          <h1 className="text-4xl font-bold text-white mb-4">{props.name}</h1>
-          <p className="text-xl text-white mb-8">{props.price} RM/month</p>
+          <h1 className="text-4xl font-bold text-white mb-4">{name}</h1>
+          <p className="text-xl text-white mb-8">{price} RM/month</p>
         </div>
         <div className="pt-2">
-          <a
-            href="#"
-            className="bg-white hover:bg-gray-200 text-purple-600 font-bold py-2 px-4 rounded"
+          <Button
+            onClick={handleEditClick}
+            sx={{
+              color: "white",
+              fontWeight: "bold",
+              py: 1,
+              px: 2,
+              borderRadius: "4px",
+            }}
           >
             Edit
-          </a>
+          </Button>
+          <Button
+            onClick={handleDeleteClick}
+            sx={{
+              color: "white",
+              fontWeight: "bold",
+              py: 1,
+              px: 2,
+              borderRadius: "4px",
+            }}
+          >
+            Delete
+          </Button>
         </div>
       </div>
-
       <div className="m-6">
         <div className="flex flex-wrap -mx-6">
           <div className="w-full px-6 sm:w-1/2 xl:w-1/3">
@@ -59,7 +170,7 @@ function PlanCard(props: any) {
               <div className="mx-5">
                 <div className="text-gray-500">Active Users</div>
                 <h4 className="text-2xl font-semibold text-gray-700">
-                  {props.activeUsers}
+                  {activeUsers}
                 </h4>
               </div>
             </div>
@@ -92,7 +203,7 @@ function PlanCard(props: any) {
               <div className="mx-5">
                 <div className="text-gray-500">Revenue last month</div>
                 <h4 className="text-2xl font-semibold text-gray-700">
-                  {props.revenue}
+                  {revenue}
                 </h4>
               </div>
             </div>
@@ -125,13 +236,46 @@ function PlanCard(props: any) {
               <div className="mx-5">
                 <div className="text-gray-500">Percentage Adoption</div>
                 <h4 className="text-2xl font-semibold text-gray-700">
-                  {props.percentage}
+                  {percentage}
                 </h4>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <Dialog open={openEditDialog} onClose={handleCloseEditDialog}>
+        <DialogTitle>Edit Plan</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="plan_name"
+            label="Plan Name"
+            type="text"
+            fullWidth
+            name="plan_name"
+            value={editDetails.plan_name}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            id="cost"
+            label="Plan Cost"
+            type="number"
+            fullWidth
+            name="cost"
+            value={editDetails.cost}
+            onChange={handleInputChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseEditDialog}>Cancel</Button>
+          <Button onClick={handleSaveChanges} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
