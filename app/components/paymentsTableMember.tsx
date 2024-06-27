@@ -15,7 +15,7 @@ const PaymentStatusChart = () => {
     const fetchPaymentsData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8090/api/v1/gym/payments/member/${memberId}`
+          `http://localhost:8090/api/v1/gym/payments/member/7`
         );
         if (response.data.success) {
           setPaymentsData(response.data.payments);

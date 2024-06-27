@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "next/navigation";
@@ -19,7 +19,7 @@ const CustomMonthLayout: React.FC = () => {
   const fetchAttendanceData = async (memberId: string | string[]) => {
     try {
       const response = await axios.get(
-        `http://localhost:8090/api/v1/gym/attendance/member/${memberId}`
+        `http://localhost:8090/api/v1/gym/attendance/member/7`
       );
       setAttendanceData(response.data.attendances);
     } catch (error) {
@@ -28,7 +28,7 @@ const CustomMonthLayout: React.FC = () => {
   };
 
   useEffect(() => {
-    const memberId = params.id;
+    const memberId = "7";
     if (memberId) {
       fetchAttendanceData(memberId);
     }
