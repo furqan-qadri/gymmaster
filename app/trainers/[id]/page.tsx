@@ -78,15 +78,13 @@ export default function TrainerProfile() {
                 trainerDetails.active_status === 1 ? "Active" : "Inactive"
               }
             />
+            <BasicCard title="Members training" content="23" />
             <BasicCard
-              title="Specialization"
-              content={trainerDetails.specialization}
-            />
-            <BasicCard
-              title="Date of Birth"
-              content={new Date(
-                trainerDetails.date_of_birth
-              ).toLocaleDateString()}
+              title="Salary"
+              // content={new Date(
+              //   trainerDetails.date_of_birth
+              // ).toLocaleDateString()}
+              content="RM 2500"
             />
           </div>
 

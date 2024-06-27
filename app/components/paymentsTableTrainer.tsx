@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import axios from "axios";
@@ -85,7 +85,7 @@ const SalaryStatusChart = () => {
         >
           &larr;
         </button>
-        <h2 style={{ margin: "0" }}>Salaries</h2>
+        <h2 style={{ margin: "0" }}>Salary Monthly record</h2>
         <button
           onClick={() => adjustDate(6)}
           style={{

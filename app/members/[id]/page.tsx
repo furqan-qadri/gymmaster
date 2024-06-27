@@ -83,10 +83,10 @@ export default function PostID() {
               content={
                 memberDetails.trainer_id
                   ? `${memberDetails.trainer_id}`
-                  : "No Trainer Assigned"
+                  : "Ahmed Ali"
               }
             />
-            <BasicCard title="Last payment" content="Apr 2024" />
+            <BasicCard title="Next payment" content="July 2024" />
           </div>
 
           <PaymentStatusChart />

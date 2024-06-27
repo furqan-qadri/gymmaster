@@ -49,11 +49,11 @@ function Members() {
       <div className="flex flex-col xl:flex-row xl:gap-5 gap-2 justify-between my-10">
         <div className="rounded-lg p-5 pr-24 min-w-[261px] bg-slate-100 ">
           <div className="mb-2 font-bold">Total trainers</div>
-          <div className="text-3xl">87</div>
+          <div className="text-3xl">11</div>
         </div>
         <div className="rounded-lg p-5 pr-24 min-w-[241px] bg-slate-100 ">
-          <div className="mb-2 font-bold">Total trainers</div>
-          <div>67</div>
+          <div className="mb-2 font-bold">Added this month</div>
+          <div>27</div>
         </div>
         <div className="rounded-lg p-5 pr-24 min-w-[241px] bg-slate-100 ">
           <div className="mb-2 font-bold">Added last month</div>
