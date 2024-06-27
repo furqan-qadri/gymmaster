@@ -42,7 +42,13 @@ export default function RootLayout({
         <ThemeProvider theme={theme}>
           <html lang="en">
             <body>
-              <div className="flex flex-col min-h-screen">
+              <div
+                className="flex flex-col min-h-screen"
+                style={{
+                  background:
+                    "linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%)",
+                }}
+              >
                 <Header />
                 <Toaster />
                 <div className="flex w-full">

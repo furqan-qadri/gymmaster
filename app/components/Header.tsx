@@ -7,9 +7,11 @@ export default async function Header() {
   const { userId } = auth();
 
   return (
-    <div className="bg-gray-600 text-neutral-100 flex px-6">
+    <div className="bg-[#151269] text-neutral-100 flex px-6">
       <div className="container mx-auto items-center justify-between py-4">
-        <Link href="/"> GymMaster</Link>
+        <Link href="/" style={{ fontSize: "22px", fontWeight: "bold" }}>
+          GymMaster
+        </Link>
       </div>
       <div className="flex gap-8 items-center xl:min-w-[175px]">
         {userId ? (

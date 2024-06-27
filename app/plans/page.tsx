@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import PlanCard from "../components/plans/plancard";
 import {
   Button,
@@ -16,6 +16,9 @@ interface Plan {
   plan_name: string;
   cost: string;
   description: string;
+  percentage: string;
+  revenue: string;
+  activeUsers: string;
 }
 
 interface PlanDetails {
@@ -83,7 +86,13 @@ function SelectedUserProfile() {
           handleCloseAddPlan();
           setPlans([
             ...plans,
-            { ...newPlanDetails, plan_id: response.data.plan_id },
+            {
+              ...newPlanDetails,
+              plan_id: response.data.plan_id,
+              percentage: "",
+              revenue: "",
+              activeUsers: "",
+            },
           ]);
         } else {
           alert("Failed to add plan.");
@@ -95,21 +104,36 @@ function SelectedUserProfile() {
     }
   };
 
+  const randomizedPlans = useMemo(() => {
+    const randomSelect = (options: (string | number)[]) =>
+      options[Math.floor(Math.random() * options.length)];
+    const revenueOptions = [2420, 6240, 3750];
+    const percentageOptions = ["54%", "27%", "19%"];
+    const activeUsersOptions = [23, 18, 15];
+
+    return plans.map((plan) => ({
+      ...plan,
+      revenue: randomSelect(revenueOptions).toString(),
+      percentage: randomSelect(percentageOptions),
+      activeUsers: randomSelect(activeUsersOptions).toString(),
+    }));
+  }, [plans]);
+
   return (
     <div>
       <Button variant="outlined" onClick={handleOpenAddPlan}>
         Add Plan
       </Button>
-      {plans.map((plan: Plan) => (
+      {randomizedPlans.map((plan: Plan) => (
         <PlanCard
           key={plan.plan_id}
           name={plan.plan_name}
           price={plan.cost}
           plan_id={plan.plan_id}
           description={plan.description}
-          revenue="3209"
-          percentage="67.9"
-          activeUsers="87"
+          revenue={plan.revenue}
+          percentage={plan.percentage}
+          activeUsers={plan.activeUsers}
         />
       ))}
       <Dialog open={openAddPlan} onClose={handleCloseAddPlan}>
