@@ -9,6 +9,8 @@ import {
   IconButton,
   Typography,
   Box,
+  DialogActions,
+  TextField,
 } from "@mui/material";
 
 import CloseIcon from "@mui/icons-material/Close";
@@ -30,6 +32,49 @@ const AnnouncementsTable: React.FC = () => {
   const [selectedAnnouncement, setSelectedAnnouncement] =
     useState<Announcement | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editDetails, setEditDetails] = useState({ title: "", content: "" });
+
+  const handleEditClick = () => {
+    if (selectedAnnouncement) {
+      setEditDetails({
+        title: selectedAnnouncement.title,
+        content: selectedAnnouncement.content,
+      });
+      setEditDialogOpen(true);
+    }
+  };
+
+  const handleCloseEditDialog = () => {
+    setEditDialogOpen(false);
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setEditDetails((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSaveChanges = async () => {
+    if (window.confirm("Are you sure you want to save these changes?")) {
+      try {
+        const response = await axios.put(
+          `http://localhost:8090/api/v1/gym/announcements/${selectedAnnouncement?.id}`,
+          { title: editDetails.title, content: editDetails.content }
+        );
+        if (response.data.success) {
+          alert("Announcement updated successfully.");
+          setEditDialogOpen(false); // Close the dialog
+          window.location.reload();
+        } else {
+          alert("Failed to update the announcement.");
+        }
+      } catch (error) {
+        console.error("Failed to update the announcement:", error);
+        alert("Error occurred while updating the announcement.");
+      }
+    }
+  };
 
   const handleDeleteAnnouncement = async () => {
     if (window.confirm("Are you sure you want to delete this announcement?")) {
@@ -159,10 +204,7 @@ const AnnouncementsTable: React.FC = () => {
             <strong>Content:</strong> {selectedAnnouncement?.content}
           </Typography>
           <Box mt={2} display="flex" justifyContent="space-between">
-            <Button
-              onClick={() => console.log("Edit functionality not implemented")}
-              color="primary"
-            >
+            <Button onClick={handleEditClick} color="primary">
               Edit
             </Button>
             <Button onClick={handleDeleteAnnouncement} color="error">
@@ -170,6 +212,44 @@ const AnnouncementsTable: React.FC = () => {
             </Button>
           </Box>
         </DialogContent>
+      </Dialog>
+      <Dialog
+        open={editDialogOpen}
+        onClose={handleCloseEditDialog}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>Edit Announcement</DialogTitle>
+        <DialogContent>
+          <TextField
+            margin="dense"
+            label="Title"
+            type="text"
+            fullWidth
+            variant="outlined"
+            name="title"
+            value={editDetails.title}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            label="Content"
+            type="text"
+            fullWidth
+            multiline
+            rows={4}
+            variant="outlined"
+            name="content"
+            value={editDetails.content}
+            onChange={handleInputChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseEditDialog}>Cancel</Button>
+          <Button onClick={handleSaveChanges} color="primary">
+            Save
+          </Button>
+        </DialogActions>
       </Dialog>
     </div>
   );

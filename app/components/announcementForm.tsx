@@ -11,12 +11,11 @@ import {
   DialogTitle,
   Button,
 } from "@mui/material";
+import axios from "axios";
 
 interface FormData {
-  id: string;
   title: string;
   content: string;
-  date: Date;
 }
 
 const AnnouncementForm = ({ onClose }: { onClose: () => void }) => {
@@ -25,18 +24,33 @@ const AnnouncementForm = ({ onClose }: { onClose: () => void }) => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
-
   const [open, setOpen] = useState(true); // Dialog is open by default
 
   const handleClose = () => {
     setOpen(false);
-    onClose(); // Call the onClose function passed from the parent component
+    onClose();
   };
 
-  const onSubmit: SubmitHandler<FormData> = (data: FormData) => {
+  const onSubmit: SubmitHandler<FormData> = async (data: FormData) => {
     console.log("Form submitted:", data);
-    setOpen(false);
-    // Can perform further actions like API call here
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8090/api/v1/gym/announcements/create",
+        data
+      );
+      if (response.data.success) {
+        alert("Announcement created successfully!");
+        window.location.reload(); // Refresh the page
+      } else {
+        alert("Failed to create announcement.");
+        setOpen(true); // Reopen the dialog if needed
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("Error occurred while creating the announcement.");
+      setOpen(true); // Reopen the dialog if there's an error
+    }
   };
 
   return (
@@ -60,9 +74,7 @@ const AnnouncementForm = ({ onClose }: { onClose: () => void }) => {
                   fullWidth
                   label="Content"
                   type="string"
-                  {...register("content", {
-                    required: "Content is required",
-                  })}
+                  {...register("content", { required: "Content is required" })}
                   error={!!errors.content}
                   helperText={errors.content?.message}
                 />
