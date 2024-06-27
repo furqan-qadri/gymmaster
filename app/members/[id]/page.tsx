@@ -55,7 +55,6 @@ export default function PostID() {
 
   return (
     <div className="w-full">
-      <h1>Post {params.id}</h1>
       <div className="flex flex-row gap-4">
         <div className="w-1/3">
           <SelectedUserProfile

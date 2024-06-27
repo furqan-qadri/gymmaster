@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 function Page() {
   const router = useRouter();
-  router.push("/members");
+  router.push("/dashboard");
   return <div></div>;
 }
 
