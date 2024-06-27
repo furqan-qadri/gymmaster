@@ -45,7 +45,7 @@ const AttendanceMarking = () => {
 
       const postData = {
         member_id: selectedMember.value,
-        attendance_date: new Date().toISOString().slice(0, 10), // YYYY-MM-DD format
+        attendance_date: "2024-06-28", // YYYY-MM-DD format
       };
 
       axios

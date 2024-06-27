@@ -48,7 +48,7 @@ function SelectedTrainerProfile(props: any) {
   const [salaryDetails, setSalaryDetails] = useState({
     salaryMonth: 1,
     salaryYear: 2024,
-    amount: 1500,
+    amount: 2500,
   });
 
   const handleClickOpen = () => {

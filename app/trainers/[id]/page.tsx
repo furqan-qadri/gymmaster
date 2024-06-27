@@ -78,7 +78,7 @@ export default function TrainerProfile() {
                 trainerDetails.active_status === 1 ? "Active" : "Inactive"
               }
             />
-            <BasicCard title="Members training" content="23" />
+            <BasicCard title="Members training" content="0" />
             <BasicCard
               title="Salary"
               // content={new Date(

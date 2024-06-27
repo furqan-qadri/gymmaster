@@ -78,14 +78,7 @@ export default function PostID() {
                 memberDetails.active_status === 1 ? "Active" : "Inactive"
               }
             />
-            <BasicCard
-              title="Trainer"
-              content={
-                memberDetails.trainer_id
-                  ? `${memberDetails.trainer_id}`
-                  : "Ahmed Ali"
-              }
-            />
+            <BasicCard title="Trainer" content={"Ahmed Ali"} />
             <BasicCard title="Next payment" content="July 2024" />
           </div>
 

@@ -69,6 +69,7 @@ function SelectedUserProfile(props: any) {
         if (response.data.success) {
           alert("Member updated successfully");
           handleClose();
+          window.location.reload();
         } else {
           alert("Failed to update member");
         }

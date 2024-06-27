@@ -29,7 +29,7 @@ interface FormData {
   phoneNumber: string;
   activeStatus: string;
   address: string;
-  signUpDate: Date;
+  signUpDate: string;
   plan?: string;
   trainer?: string;
 }
@@ -60,7 +60,7 @@ const MemberSignUp = ({ onClose }: { onClose: () => void }) => {
         phone: data.phoneNumber,
         email_id: data.email,
         address: data.address,
-        sign_up_date: formattedSignUpDate, // Current date
+        sign_up_date: "2024-06-28", // Current date
         plan_id: data.plan, // Assuming plan is the plan_id
         trainer_id: data.trainer, // Assuming trainer is the trainer_id
       };
