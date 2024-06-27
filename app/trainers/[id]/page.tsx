@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AttendanceCalendar from "@/app/components/attendanceCalendar"; // Assuming trainers also have attendance records
 import BasicCard from "@/app/components/basiccard";
-import PaymentStatusChart from "@/app/components/paymentsTable"; // Assuming trainers have payment statuses to monitor
+import PaymentStatusChart from "@/app/components/paymentsTableTrainer"; // Assuming trainers have payment statuses to monitor
 // import SelectedUserProfile from "@/app/components/userProfile";
 import SelectedUserProfile from "@/app/components/userProfileTrainer";
 import { useParams, useRouter } from "next/navigation"; // Correcting the import for `next/router`
