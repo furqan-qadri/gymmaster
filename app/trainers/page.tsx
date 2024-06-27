@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Button, Dialog, DialogContent } from "@mui/material";
-import MemberSignUp from "../components/memberSignUp";
+import MemberSignUp from "../components/TrainerSignUp";
 import DataGridDemo from "../components/DatagridTrainer";
 import MyDropZone from "../components/MyDropzone";
 
@@ -39,20 +39,20 @@ function Members() {
   return (
     <div>
       <div className="flex mb-4 justify-between items-center align-middle">
-        <h1 className="text-2xl font-bold">Members</h1>
+        <h1 className="text-2xl font-bold">Trainers</h1>
         <Button variant="contained" onClick={handleButtonClick}>
-          Add member
+          Add trainer
         </Button>
         {showForm && <MemberSignUp onClose={handleCloseForm} />}
       </div>
 
       <div className="flex flex-col xl:flex-row xl:gap-5 gap-2 justify-between my-10">
         <div className="rounded-lg p-5 pr-24 min-w-[261px] bg-slate-100 ">
-          <div className="mb-2 font-bold">Total Members</div>
+          <div className="mb-2 font-bold">Total trainers</div>
           <div className="text-3xl">87</div>
         </div>
         <div className="rounded-lg p-5 pr-24 min-w-[241px] bg-slate-100 ">
-          <div className="mb-2 font-bold">Active Members</div>
+          <div className="mb-2 font-bold">Total trainers</div>
           <div>67</div>
         </div>
         <div className="rounded-lg p-5 pr-24 min-w-[241px] bg-slate-100 ">

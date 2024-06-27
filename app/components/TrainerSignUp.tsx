@@ -12,29 +12,23 @@ import {
   Select,
   Box,
   FormHelperText,
-  TextareaAutosize,
   DialogContent,
   DialogActions,
   Dialog,
   DialogTitle,
-  // DatePicker,
 } from "@mui/material";
 
 interface FormData {
-  name: string;
+  full_name: string;
   sex: string;
   age: number;
-  email: string;
-  icPassport: string;
-  phoneNumber: string;
-  activeStatus: string;
+  email_id: string;
+  IC_Passport: string;
+  phone: string;
   address: string;
-  signUpDate: Date;
-  plan?: string;
-  trainer?: string;
 }
 
-const MemberSignUp = ({ onClose }: { onClose: () => void }) => {
+const TrainerSignUp = ({ onClose }: { onClose: () => void }) => {
   const {
     register,
     handleSubmit,
@@ -50,31 +44,28 @@ const MemberSignUp = ({ onClose }: { onClose: () => void }) => {
 
   const onSubmit: SubmitHandler<FormData> = async (data: FormData) => {
     try {
-      const formattedSignUpDate = new Date().toISOString().split("T")[0];
       // Prepare the payload
       const payload = {
-        full_name: data.name,
+        full_name: data.full_name,
         age: data.age,
         sex: data.sex,
-        IC_Passport: data.icPassport,
-        phone: data.phoneNumber,
-        email_id: data.email,
+        IC_Passport: data.IC_Passport,
+        phone: data.phone,
+        email_id: data.email_id,
         address: data.address,
-        sign_up_date: formattedSignUpDate, // Current date
-        plan_id: data.plan, // Assuming plan is the plan_id
-        trainer_id: data.trainer, // Assuming trainer is the trainer_id
       };
 
       // Make the POST request
       const response = await axios.post(
-        "http://localhost:8090/api/v1/gym/members/create",
+        "http://localhost:8090/api/v1/gym/trainers/create",
         payload
       );
-      alert("Member added successfully");
-      // console.log("Data stored in database:", response.data);
+
+      // If successful, log the response and close the modal
+      console.log("Data stored in database:", response.data);
       setOpen(false);
-      onClose();
-      window.location.reload(); // Call the onClose function passed from the parent component
+      window.location.reload();
+      onClose(); // Call the onClose function passed from the parent component
     } catch (error) {
       // If there's an error, log it and keep the modal open
       console.error("Error storing data:", error);
@@ -85,7 +76,7 @@ const MemberSignUp = ({ onClose }: { onClose: () => void }) => {
   return (
     <>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add member</DialogTitle>
+        <DialogTitle>Add Trainer</DialogTitle>
         <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
           <DialogContent>
             <Grid container spacing={2}>
@@ -93,9 +84,9 @@ const MemberSignUp = ({ onClose }: { onClose: () => void }) => {
                 <TextField
                   fullWidth
                   label="Name"
-                  {...register("name", { required: "Name is required" })}
-                  error={!!errors.name}
-                  helperText={errors.name?.message}
+                  {...register("full_name", { required: "Name is required" })}
+                  error={!!errors.full_name}
+                  helperText={errors.full_name?.message}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -131,69 +122,48 @@ const MemberSignUp = ({ onClose }: { onClose: () => void }) => {
                   fullWidth
                   label="Email"
                   type="email"
-                  {...register("email", {
+                  {...register("email_id", {
                     required: "Email is required",
                     pattern: {
                       value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
                       message: "Invalid email address",
                     },
                   })}
-                  error={!!errors.email}
-                  helperText={errors.email?.message}
+                  error={!!errors.email_id}
+                  helperText={errors.email_id?.message}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   label="IC/Passport"
-                  type="text" // Change type to "text"
-                  {...register("icPassport", {
+                  type="text"
+                  {...register("IC_Passport", {
                     required: "IC/Passport is required",
                     minLength: {
                       value: 7,
                       message: "IC/Passport must be at least 7 characters long",
                     },
                   })}
-                  error={!!errors.icPassport}
-                  helperText={errors.icPassport?.message}
+                  error={!!errors.IC_Passport}
+                  helperText={errors.IC_Passport?.message}
                 />
               </Grid>
-
               <Grid item xs={12}>
                 <TextField
                   fullWidth
                   label="Phone Number"
                   type="tel"
-                  {...register("phoneNumber", {
+                  {...register("phone", {
                     required: "Phone number is required",
                     pattern: {
                       value: /^\d{10,11}$/,
                       message: "Invalid phone number",
                     },
                   })}
-                  error={!!errors.phoneNumber}
-                  helperText={errors.phoneNumber?.message}
+                  error={!!errors.phone}
+                  helperText={errors.phone?.message}
                 />
-              </Grid>
-              {/* Additional Fields */}
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth error={!!errors.activeStatus}>
-                  <InputLabel>Active Status</InputLabel>
-                  <Select
-                    defaultValue={"Active"}
-                    {...register("activeStatus", {
-                      required: "Active status is required",
-                    })}
-                    error={!!errors.activeStatus}
-                    label="Active Status"
-                  >
-                    <MenuItem value="Active">Active</MenuItem>
-                    <MenuItem value="Inactive">Inactive</MenuItem>
-                  </Select>
-                  <FormHelperText>
-                    {errors.activeStatus?.message}
-                  </FormHelperText>
-                </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -205,40 +175,6 @@ const MemberSignUp = ({ onClose }: { onClose: () => void }) => {
                   error={!!errors.address}
                   helperText={errors.address?.message}
                 />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth error={!!errors.plan}>
-                  <InputLabel>Plan</InputLabel>
-                  <Select
-                    {...register("plan", { required: "Plan is required" })}
-                    error={!!errors.plan}
-                    label="Plan"
-                  >
-                    <MenuItem value="">Select Plan</MenuItem>
-                    <MenuItem value="Basic">Basic</MenuItem>
-                    <MenuItem value="1">Premium</MenuItem>
-                    <MenuItem value="VIP">VIP</MenuItem>
-                  </Select>
-                  <FormHelperText>{errors.plan?.message}</FormHelperText>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth error={!!errors.trainer}>
-                  <InputLabel>Trainer</InputLabel>
-                  <Select
-                    {...register("trainer", {
-                      required: "Trainer is required",
-                    })}
-                    error={!!errors.trainer}
-                    label="Trainer"
-                  >
-                    <MenuItem value="">Select Trainer</MenuItem>
-                    <MenuItem value="4">John Doe</MenuItem>
-                    <MenuItem value="4">Jane Smith</MenuItem>
-                    <MenuItem value="4">Sam Wilson</MenuItem>
-                  </Select>
-                  <FormHelperText>{errors.trainer?.message}</FormHelperText>
-                </FormControl>
               </Grid>
             </Grid>
           </DialogContent>
@@ -254,4 +190,4 @@ const MemberSignUp = ({ onClose }: { onClose: () => void }) => {
   );
 };
 
-export default MemberSignUp;
+export default TrainerSignUp;
