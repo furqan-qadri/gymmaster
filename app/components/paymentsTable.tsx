@@ -1,5 +1,3 @@
-// src/components/PaymentStatusChart.js
-
 import React, { useState } from "react";
 import moment from "moment"; // Ensure moment is installed using npm install moment
 
@@ -8,35 +6,85 @@ const mockPaymentsData = [
   {
     payment_id: 1,
     member_id: 101,
-    month: "October",
-    year: 2023,
+    payment_month: 10,
+    payment_year: 2023,
+    is_paid: true,
+  },
+  {
+    payment_id: 144,
+    member_id: 101,
+    payment_month: 1,
+    payment_year: 2024,
     is_paid: true,
   },
   {
     payment_id: 2,
     member_id: 101,
-    month: "September",
-    year: 2023,
+    payment_month: 9,
+    payment_year: 2023,
     is_paid: false,
   },
-  { payment_id: 3, member_id: 101, month: "August", year: 2023, is_paid: true },
-  { payment_id: 4, member_id: 101, month: "July", year: 2023, is_paid: false },
-  { payment_id: 5, member_id: 101, month: "June", year: 2023, is_paid: true },
-  { payment_id: 6, member_id: 101, month: "May", year: 2023, is_paid: false },
-  { payment_id: 7, member_id: 101, month: "April", year: 2023, is_paid: true },
-  { payment_id: 8, member_id: 101, month: "March", year: 2024, is_paid: false },
+  {
+    payment_id: 3,
+    member_id: 101,
+    payment_month: 8,
+    payment_year: 2023,
+    is_paid: true,
+  },
+  {
+    payment_id: 4,
+    member_id: 101,
+    payment_month: 7,
+    payment_year: 2023,
+    is_paid: false,
+  },
+  {
+    payment_id: 5,
+    member_id: 101,
+    payment_month: 6,
+    payment_year: 2023,
+    is_paid: true,
+  },
+  {
+    payment_id: 6,
+    member_id: 101,
+    payment_month: 5,
+    payment_year: 2023,
+    is_paid: false,
+  },
+  {
+    payment_id: 7,
+    member_id: 101,
+    payment_month: 4,
+    payment_year: 2023,
+    is_paid: true,
+  },
   {
     payment_id: 8,
     member_id: 101,
-    month: "January",
-    year: 2024,
-    is_paid: true,
+    payment_month: 3,
+    payment_year: 2024,
+    is_paid: false,
   },
   {
     payment_id: 9,
     member_id: 101,
-    month: "February",
-    year: 2024,
+    payment_month: 3,
+    payment_year: 2024,
+    is_paid: false,
+  },
+  {
+    payment_id: 10,
+    member_id: 101,
+    payment_month: 1,
+    payment_year: 2024,
+    is_paid: true,
+  },
+  {
+    payment_id: 11,
+    member_id: 101,
+    payment_month: 2,
+    payment_year: 2024,
     is_paid: true,
   },
 ];
@@ -44,25 +92,26 @@ const mockPaymentsData = [
 const PaymentStatusChart = () => {
   const [currentDate, setCurrentDate] = useState(moment());
 
-  // Function to adjust the current date back and forth
+  // Function to adjust the current date back and forth by months
   const adjustDate = (months: number) => {
     setCurrentDate(currentDate.clone().add(months, "months"));
   };
 
   // Generate the last 6 months based on current date
-  const months = [...Array(6)]
-    .map((_, i) =>
-      currentDate.clone().subtract(i, "months").format("MMMM YYYY")
-    )
+  const paymentMonths = [...Array(6)]
+    .map((_, i) => currentDate.clone().subtract(i, "months").format("YYYY-MM"))
     .reverse();
 
   // Find payment status for each month
-  const paymentStatus = months.map((month) => {
+  const paymentStatus = paymentMonths.map((month) => {
+    const [year, monthNum] = month.split("-");
     const payment = mockPaymentsData.find(
-      (p) => `${p.month} ${p.year}` === month
+      (p) =>
+        p.payment_month === parseInt(monthNum, 10) &&
+        p.payment_year === parseInt(year, 10)
     );
     return {
-      month,
+      month: `${moment(monthNum, "MM").format("MMMM")} ${year}`, // Convert month number back to name for display
       isPaid: payment ? payment.is_paid : false,
     };
   });
@@ -71,7 +120,7 @@ const PaymentStatusChart = () => {
     <div
       style={{
         padding: "20px",
-        border: "1px solid #ccc",
+        border: "10px solid #ccc",
         borderRadius: "8px",
         maxWidth: "450px",
         margin: "20px auto",
@@ -134,7 +183,7 @@ const PaymentStatusChart = () => {
           >
             {status.month.split(" ")[0]}
             <br />
-            {status.month.split(" ")[1]} {/* Display month and year */}
+            {status.month.split(" ")[1]}{" "}
           </div>
         ))}
       </div>
