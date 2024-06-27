@@ -10,8 +10,10 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 import React, { useState } from "react";
 import { BsFillTelephoneFill } from "react-icons/bs";
+import { useRouter } from "next/navigation";
 
 function SelectedUserProfile(props: any) {
+  const router = useRouter();
   const params = useParams();
   const [open, setOpen] = useState(false);
   const [editedMember, setEditedMember] = useState({
@@ -49,6 +51,26 @@ function SelectedUserProfile(props: any) {
       } catch (error) {
         console.error("Failed to update member:", error);
         alert("Failed to update member");
+      }
+    }
+  };
+
+  const handleDelete = async () => {
+    if (window.confirm("Are you sure you want to delete this member?")) {
+      try {
+        const memberId = params.id;
+        const response = await axios.delete(
+          `http://localhost:8090/api/v1/gym/members/delete/${memberId}`
+        );
+        if (response.data.success) {
+          alert("Member deleted successfully");
+          router.push("/members"); // Redirect to the members page
+        } else {
+          alert("Failed to delete member");
+        }
+      } catch (error) {
+        console.error("Failed to delete member:", error);
+        alert("Failed to delete member");
       }
     }
   };
@@ -128,11 +150,7 @@ function SelectedUserProfile(props: any) {
           <Button onClick={handleClickOpen} variant="contained">
             Edit
           </Button>
-          <Button
-            onClick={() => alert("Do you want to delete the member?")}
-            variant="outlined"
-            color="error"
-          >
+          <Button onClick={handleDelete} variant="outlined" color="error">
             Delete
           </Button>
         </div>
