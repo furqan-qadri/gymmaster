@@ -1,11 +1,72 @@
-import { Button } from "@mui/material";
-import React from "react";
-import { BsFillTelephoneFill } from "react-icons/bs";
+import React, { useState } from "react";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  TextField,
+  DialogTitle,
+} from "@mui/material";
+import axios from "axios";
 
-function SelectedUserProfile(props: any) {
+interface UserProfileProps {
+  name: string;
+  phone: string;
+  email: string;
+  ic: string;
+  address: string;
+  age: string;
+  sex: string;
+  signupdate: string;
+}
+
+function SelectedUserProfile(props: UserProfileProps) {
+  const [open, setOpen] = useState(false);
+  const [editedMember, setEditedMember] = useState({
+    sex: props.sex,
+    IC_Passport: props.ic,
+    active_status: 1, // Assuming active_status is managed elsewhere or static
+    phone: props.phone,
+    email_id: props.email,
+    address: props.address,
+  });
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleUpdate = async () => {
+    if (window.confirm("Are you sure you want to update this member?")) {
+      try {
+        const response = await axios.put(
+          "http://localhost:8090/api/v1/gym/members/update/16",
+          editedMember
+        );
+        if (response.status === 200) {
+          alert("Member updated successfully");
+          handleClose();
+        }
+      } catch (error) {
+        console.error("Failed to update member:", error);
+        alert("Failed to update member");
+      }
+    }
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditedMember({
+      ...editedMember,
+      [event.target.name]: event.target.value,
+    });
+  };
+
   return (
     <div className="w-full dark:bg-gray-700">
-      <div className="max-w-sm mx-auto bg-white dark:bg-gray-900 rounded-lg  overflow-hidden shadow-lg py-4">
+      <div className="max-w-sm mx-auto bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg py-4">
         <div className="">
           <div className="text-center my-2">
             <img
@@ -18,69 +79,87 @@ function SelectedUserProfile(props: any) {
                 {props.name}
               </h3>
               <div className="inline-flex text-gray-700 dark:text-gray-300 items-center">
-                <BsFillTelephoneFill />
                 {props.phone}
               </div>
             </div>
           </div>
         </div>
-        <div className="px-4 py-4">
-          <div className="border-t border-gray-200">
-            <dl>
-              <div className="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Email</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {props.email}
-                </dd>
-              </div>
-              <div className="bg-white px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">
-                  IC/Passport
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {props.ic}
-                </dd>
-              </div>
-              <div className="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Age</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {props.age}
-                </dd>
-              </div>
-              <div className="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Sex</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {props.sex}
-                </dd>
-              </div>
-              <div className="bg-white px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Address</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {props.address}
-                </dd>
-              </div>
-              <div className="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">
-                  Sign up date
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {props.signupdate}
-                </dd>
-              </div>
-            </dl>
-          </div>
-        </div>
+        {/* Details and Edit/Delete Buttons */}
+        {/* Rest of the component */}
         <div className="flex gap-2 px-2 items-center justify-center">
-          <Button variant="contained">Edit</Button>
+          <Button onClick={handleClickOpen} variant="contained">
+            Edit
+          </Button>
           <Button
             onClick={() => alert("Do you want to delete the member?")}
             variant="outlined"
             color="error"
           >
-            Delete {props.role}
+            Delete
           </Button>
         </div>
       </div>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Edit Member</DialogTitle>
+        <DialogContent>
+          <TextField
+            margin="dense"
+            label="Phone"
+            type="text"
+            fullWidth
+            variant="outlined"
+            name="phone"
+            value={editedMember.phone}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="dense"
+            label="Email"
+            type="email"
+            fullWidth
+            variant="outlined"
+            name="email_id"
+            value={editedMember.email_id}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="dense"
+            label="IC/Passport"
+            type="text"
+            fullWidth
+            variant="outlined"
+            name="IC_Passport"
+            value={editedMember.IC_Passport}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="dense"
+            label="Address"
+            type="text"
+            fullWidth
+            variant="outlined"
+            name="address"
+            value={editedMember.address}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="dense"
+            label="Sex"
+            type="text"
+            fullWidth
+            variant="outlined"
+            name="sex"
+            value={editedMember.sex}
+            onChange={handleChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleUpdate} color="primary">
+            Update
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
