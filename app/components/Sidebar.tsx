@@ -50,7 +50,7 @@ function Sidebar() {
           </li>
           <li>
             <a
-              href="/fees"
+              href="/payments"
               className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
             >
               <svg
@@ -72,7 +72,7 @@ function Sidebar() {
           </li>
           <li>
             <a
-              href="/attendance"
+              href="/attendanceMember"
               className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
             >
               <svg
