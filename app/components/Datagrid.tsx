@@ -7,7 +7,8 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import TextField from "@mui/material/TextField";
 import { useRouter } from "next/navigation"; // Make sure this is correctly imported
 import Avatar from "@mui/material/Avatar";
-import axios from "axios"; // Ensure Axios is imported
+import axios from "axios";
+// Ensure Axios is imported
 
 interface Member {
   id: number; // This will be the `member_id` from the API
@@ -26,6 +27,21 @@ export default function DataGridDemo() {
     pageSize: 10,
   });
   const router = useRouter();
+
+  const handleDelete = async (id: any, name: any) => {
+    if (window.confirm(`Are you sure you want to delete ${name}?`)) {
+      try {
+        const url = `http://localhost:8090/api/v1/gym/members/delete/${id}`;
+        await axios.delete(url);
+        alert("Member deleted successfully");
+        window.location.reload();
+        router.refresh(); // Refresh the current route
+      } catch (error) {
+        console.error("Failed to delete the member:", error);
+        alert("Failed to delete the member");
+      }
+    }
+  };
 
   useEffect(() => {
     async function fetchMembers() {
@@ -113,7 +129,7 @@ export default function DataGridDemo() {
           key="delete"
           icon={<DeleteIcon />}
           label="Delete"
-          onClick={() => alert(`Deleting ${params.id}`)}
+          onClick={() => handleDelete(params.id, params.row.full_name)}
           showInMenu
         />,
       ],

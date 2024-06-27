@@ -1,42 +1,98 @@
 "use client";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import AttendanceCalendar from "@/app/components/attendanceCalendar";
 import BasicCard from "@/app/components/basiccard";
 import PaymentStatusChart from "@/app/components/paymentsTable";
 import SelectedUserProfile from "@/app/components/userProfile";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+
+interface MemberDetails {
+  member_id: number;
+  full_name: string;
+  age: number;
+  sex: string;
+  IC_Passport: string;
+  active_status: number;
+  phone: string;
+  email_id: string;
+  address: string;
+  sign_up_date: string;
+  plan_id: number;
+  trainer_id: number | null;
+  date_of_birth: string;
+}
 
 export default function PostID() {
+  const router = useRouter();
   const params = useParams();
-  console.log(params);
+  const [memberDetails, setMemberDetails] = useState<MemberDetails | null>(
+    null
+  );
+
+  useEffect(() => {
+    const memberId = params.id as string;
+    const fetchMemberDetails = async () => {
+      const url = `http://localhost:8090/api/v1/gym/members/${memberId}`;
+      try {
+        const response = await axios.get(url);
+        if (response.data.success && response.data.memberDetails.length > 0) {
+          setMemberDetails(response.data.memberDetails[0]);
+        }
+      } catch (error) {
+        console.error("Error fetching member details:", error);
+      }
+    };
+
+    if (memberId) {
+      fetchMemberDetails();
+    }
+  }, [params.id]);
+
+  if (!memberDetails) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <div className="w-full">
-      Post {params.id}
-      <div className="flex flex-row gap-4 ">
-        <div className=" w-1/3">
-          {" "}
+      <h1>Post {params.id}</h1>
+      <div className="flex flex-row gap-4">
+        <div className="w-1/3">
           <SelectedUserProfile
-            name="Mohammad Amir bin Mazlan"
-            phone="0109876676"
-            email="muhammadamirtyb@gmail.com"
-            ic="T4673878"
-            address="Residensi UTMKL, No. 8, Jalan Maktab, Kampung Datuk Keramat, 54100 Kuala Lumpur, Malaysia"
-            age="24"
-            sex="Male"
-            signupdate="24-04-2024"
+            name={memberDetails.full_name}
+            phone={memberDetails.phone}
+            email={memberDetails.email_id}
+            ic={memberDetails.IC_Passport}
+            address={memberDetails.address}
+            age={memberDetails.age.toString()}
+            sex={memberDetails.sex}
+            signupdate={new Date(
+              memberDetails.sign_up_date
+            ).toLocaleDateString()}
           />
         </div>
         <div className="flex flex-col w-2/3 bg-slate-50">
           <div className="flex flex-col xl:flex-row xl:gap-5 gap-2 justify-between mb-10 px-3">
-            <BasicCard title="Status" content="Active" />
-            <BasicCard title="Trainer" content="Amir Ali" />
+            <BasicCard
+              title="Status"
+              content={
+                memberDetails.active_status === 1 ? "Active" : "Inactive"
+              }
+            />
+            <BasicCard
+              title="Trainer"
+              content={
+                memberDetails.trainer_id
+                  ? `${memberDetails.trainer_id}`
+                  : "No Trainer Assigned"
+              }
+            />
             <BasicCard title="Last payment" content="Apr 2024" />
           </div>
 
           <PaymentStatusChart />
           <div className="flex w-100 items-center justify-center">
-            <div className="flex w-1/2 items-center justify-center">
-              <AttendanceCalendar />
-            </div>
+            <AttendanceCalendar />
           </div>
         </div>
       </div>
