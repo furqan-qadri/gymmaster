@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { DataGrid, GridColDef, GridCellParams } from "@mui/x-data-grid";
 import {
+  Button,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -9,6 +10,7 @@ import {
   Typography,
   Box,
 } from "@mui/material";
+
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 
@@ -29,6 +31,25 @@ const AnnouncementsTable: React.FC = () => {
     useState<Announcement | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  const handleDeleteAnnouncement = async () => {
+    if (window.confirm("Are you sure you want to delete this announcement?")) {
+      try {
+        const response = await axios.delete(
+          `http://localhost:8090/api/v1/gym/announcements/${selectedAnnouncement?.id}`
+        );
+        if (response.data.success) {
+          alert("Announcement deleted successfully.");
+          window.location.reload(); // Refresh the page to reflect changes
+        } else {
+          alert("Failed to delete the announcement.");
+        }
+      } catch (error) {
+        console.error("Error deleting the announcement:", error);
+        alert("Error occurred while deleting the announcement.");
+      }
+    }
+  };
+
   useEffect(() => {
     const fetchAnnouncements = async () => {
       try {
@@ -37,7 +58,7 @@ const AnnouncementsTable: React.FC = () => {
         );
         if (response.data.success) {
           const mappedAnnouncements = response.data.announcements.map(
-            (announcement) => ({
+            (announcement: any) => ({
               id: announcement.announcement_id,
               date: new Date(
                 announcement.announcement_date
@@ -137,6 +158,17 @@ const AnnouncementsTable: React.FC = () => {
           <Typography variant="body1">
             <strong>Content:</strong> {selectedAnnouncement?.content}
           </Typography>
+          <Box mt={2} display="flex" justifyContent="space-between">
+            <Button
+              onClick={() => console.log("Edit functionality not implemented")}
+              color="primary"
+            >
+              Edit
+            </Button>
+            <Button onClick={handleDeleteAnnouncement} color="error">
+              Delete
+            </Button>
+          </Box>
         </DialogContent>
       </Dialog>
     </div>
