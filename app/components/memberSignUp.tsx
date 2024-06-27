@@ -215,9 +215,9 @@ const MemberSignUp = ({ onClose }: { onClose: () => void }) => {
                     label="Plan"
                   >
                     <MenuItem value="">Select Plan</MenuItem>
-                    <MenuItem value="Basic">Basic</MenuItem>
-                    <MenuItem value="1">Premium</MenuItem>
-                    <MenuItem value="VIP">VIP</MenuItem>
+                    <MenuItem value="2">Platinum</MenuItem>
+                    <MenuItem value="1">Gold</MenuItem>
+                    <MenuItem value="9">Silver</MenuItem>
                   </Select>
                   <FormHelperText>{errors.plan?.message}</FormHelperText>
                 </FormControl>

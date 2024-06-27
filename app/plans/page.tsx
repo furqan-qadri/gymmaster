@@ -105,17 +105,44 @@ function SelectedUserProfile() {
   };
 
   const randomizedPlans = useMemo(() => {
-    const randomSelect = (options: (string | number)[]) =>
-      options[Math.floor(Math.random() * options.length)];
-    const revenueOptions = [2420, 6240, 3750];
-    const percentageOptions = ["54%", "27%", "19%"];
-    const activeUsersOptions = [23, 18, 15];
+    const shuffle = (array) => {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    };
 
-    return plans.map((plan) => ({
+    const revenueOptions = shuffle([
+      2420,
+      6240,
+      3750,
+      ...Array(Math.max(0, plans.length - 3))
+        .fill(0)
+        .map(() => Math.floor(Math.random() * 5000) + 1000),
+    ]);
+    const percentageOptions = shuffle([
+      "54%",
+      "27%",
+      "19%",
+      ...Array(Math.max(0, plans.length - 3))
+        .fill(0)
+        .map(() => `${Math.floor(Math.random() * 50) + 10}%`),
+    ]);
+    const activeUsersOptions = shuffle([
+      23,
+      18,
+      15,
+      ...Array(Math.max(0, plans.length - 3))
+        .fill(0)
+        .map(() => Math.floor(Math.random() * 30) + 10),
+    ]);
+
+    return plans.map((plan, index) => ({
       ...plan,
-      revenue: randomSelect(revenueOptions).toString(),
-      percentage: randomSelect(percentageOptions),
-      activeUsers: randomSelect(activeUsersOptions).toString(),
+      revenue: revenueOptions[index].toString(),
+      percentage: percentageOptions[index],
+      activeUsers: activeUsersOptions[index].toString(),
     }));
   }, [plans]);
 
