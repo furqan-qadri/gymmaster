@@ -1,31 +1,24 @@
-import React, { useState } from "react";
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
-  TextField,
   DialogTitle,
+  TextField,
 } from "@mui/material";
 import axios from "axios";
+import { useParams } from "next/navigation";
+import React, { useState } from "react";
+import { BsFillTelephoneFill } from "react-icons/bs";
 
-interface UserProfileProps {
-  name: string;
-  phone: string;
-  email: string;
-  ic: string;
-  address: string;
-  age: string;
-  sex: string;
-  signupdate: string;
-}
-
-function SelectedUserProfile(props: UserProfileProps) {
+function SelectedUserProfile(props: any) {
+  const params = useParams();
   const [open, setOpen] = useState(false);
   const [editedMember, setEditedMember] = useState({
+    full_name: props.name,
     sex: props.sex,
     IC_Passport: props.ic,
-    active_status: 1, // Assuming active_status is managed elsewhere or static
+    active_status: 1,
     phone: props.phone,
     email_id: props.email,
     address: props.address,
@@ -42,13 +35,16 @@ function SelectedUserProfile(props: UserProfileProps) {
   const handleUpdate = async () => {
     if (window.confirm("Are you sure you want to update this member?")) {
       try {
+        const memberId = params.id; // Assuming the route parameter is named 'id'
         const response = await axios.put(
-          "http://localhost:8090/api/v1/gym/members/update/16",
+          `http://localhost:8090/api/v1/gym/members/update/${memberId}`,
           editedMember
         );
-        if (response.status === 200) {
+        if (response.data.success) {
           alert("Member updated successfully");
           handleClose();
+        } else {
+          alert("Failed to update member");
         }
       } catch (error) {
         console.error("Failed to update member:", error);
@@ -57,16 +53,13 @@ function SelectedUserProfile(props: UserProfileProps) {
     }
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditedMember({
-      ...editedMember,
-      [event.target.name]: event.target.value,
-    });
+  const handleChange = (field: any, value: any) => {
+    setEditedMember((prev: any) => ({ ...prev, [field]: value }));
   };
 
   return (
     <div className="w-full dark:bg-gray-700">
-      <div className="max-w-sm mx-auto bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg py-4">
+      <div className="max-w-sm mx-auto bg-white dark:bg-gray-900 rounded-lg  overflow-hidden shadow-lg py-4">
         <div className="">
           <div className="text-center my-2">
             <img
@@ -79,13 +72,58 @@ function SelectedUserProfile(props: UserProfileProps) {
                 {props.name}
               </h3>
               <div className="inline-flex text-gray-700 dark:text-gray-300 items-center">
+                <BsFillTelephoneFill />
                 {props.phone}
               </div>
             </div>
           </div>
         </div>
-        {/* Details and Edit/Delete Buttons */}
-        {/* Rest of the component */}
+        <div className="px-4 py-4">
+          <div className="border-t border-gray-200">
+            <dl>
+              <div className="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">Email</dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {props.email}
+                </dd>
+              </div>
+              <div className="bg-white px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">
+                  IC/Passport
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {props.ic}
+                </dd>
+              </div>
+              <div className="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">Age</dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {props.age}
+                </dd>
+              </div>
+              <div className="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">Sex</dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {props.sex}
+                </dd>
+              </div>
+              <div className="bg-white px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">Address</dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {props.address}
+                </dd>
+              </div>
+              <div className="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">
+                  Sign up date
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {props.signupdate}
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
         <div className="flex gap-2 px-2 items-center justify-center">
           <Button onClick={handleClickOpen} variant="contained">
             Edit
@@ -103,54 +141,54 @@ function SelectedUserProfile(props: UserProfileProps) {
         <DialogTitle>Edit Member</DialogTitle>
         <DialogContent>
           <TextField
+            autoFocus
+            margin="dense"
+            label="Full Name"
+            type="text"
+            fullWidth
+            value={editedMember.full_name}
+            onChange={(e) => handleChange("full_name", e.target.value)}
+          />
+          <TextField
+            autoFocus
             margin="dense"
             label="Phone"
             type="text"
             fullWidth
-            variant="outlined"
-            name="phone"
             value={editedMember.phone}
-            onChange={handleChange}
+            onChange={(e) => handleChange("phone", e.target.value)}
           />
           <TextField
             margin="dense"
             label="Email"
             type="email"
             fullWidth
-            variant="outlined"
-            name="email_id"
             value={editedMember.email_id}
-            onChange={handleChange}
+            onChange={(e) => handleChange("email_id", e.target.value)}
           />
           <TextField
             margin="dense"
             label="IC/Passport"
             type="text"
             fullWidth
-            variant="outlined"
-            name="IC_Passport"
             value={editedMember.IC_Passport}
-            onChange={handleChange}
+            onChange={(e) => handleChange("IC_Passport", e.target.value)}
           />
           <TextField
             margin="dense"
             label="Address"
             type="text"
             fullWidth
-            variant="outlined"
-            name="address"
             value={editedMember.address}
-            onChange={handleChange}
+            onChange={(e) => handleChange("address", e.target.value)}
           />
           <TextField
             margin="dense"
             label="Sex"
             type="text"
             fullWidth
-            variant="outlined"
-            name="sex"
             value={editedMember.sex}
-            onChange={handleChange}
+            onChange={(e) => handleChange("sex", e.target.value)}
           />
         </DialogContent>
         <DialogActions>
